@@ -3,13 +3,14 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ITask} from '../../models/ITask';
 
-type TodoProp = PropsWithChildren<{
+type TaskProp = PropsWithChildren<{
   task: ITask;
   onPressDone(): void;
   onPressRemove(): void;
+  onPressEdit(): void;
 }>;
 
-export default function TodoTask(prop: TodoProp): JSX.Element {
+export default function TaskTile(prop: TaskProp): JSX.Element {
   const {task} = prop;
   return (
     <View style={styles.task}>
@@ -21,6 +22,17 @@ export default function TodoTask(prop: TodoProp): JSX.Element {
         {task.title}
       </Text>
       <View style={{flexDirection: 'row'}}>
+        {!task.isCompleted && (
+          <TouchableOpacity onPress={prop.onPressEdit}>
+            <MaterialIcons
+              name="edit"
+              style={{backgroundColor: 'grey', padding: 4, borderRadius: 4}}
+              color={'white'}
+              size={20}
+            />
+          </TouchableOpacity>
+        )}
+        <View style={{width: 8}} />
         {!task.isCompleted && (
           <TouchableOpacity onPress={prop.onPressDone}>
             <MaterialIcons
@@ -47,6 +59,7 @@ export default function TodoTask(prop: TodoProp): JSX.Element {
 const styles = StyleSheet.create({
   text: {
     fontSize: 20,
+    flex: 1,
     color: 'black',
   },
   task: {

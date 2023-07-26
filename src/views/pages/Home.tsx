@@ -8,17 +8,24 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-import TodoTask from '../components/TodoTask';
+import TaskTile from '../components/TaskTile';
 import {useEffect, useState} from 'react';
 import {ITask} from '../../models/ITask';
 import {
   getValueFromLocalStorage,
   saveToLocalStorage,
 } from '../../utils/AsyncStorage';
+import EditModal from '../components/EditModal';
 
 function Home(): JSX.Element {
   const [task, setTask] = useState<string>('');
   const [listTask, setListTask] = useState<ITask[]>([]);
+  const [showModal, setShowmodal] = useState<boolean>(false);
+  const [index, setIndex] = useState<number>(-1);
+  const [modalTask, setModalTask] = useState<ITask>({
+    title: '',
+    isCompleted: false,
+  });
 
   useEffect(() => {
     getTaskFromStorage();
@@ -55,19 +62,39 @@ function Home(): JSX.Element {
     setListTask([...listTask]);
   };
 
+  const onPressEditAtIndex = (index: number) => {
+    setModalTask(listTask[index]);
+    setIndex(index);
+    setShowmodal(!showModal);
+  };
+
+  const onConfirmTask = (task: ITask, index: number) => {
+    listTask[index] = task;
+    setListTask([...listTask]);
+    setShowmodal(!showModal);
+  };
+
   return (
     <View
       style={{
         flex: 1,
       }}>
+      <EditModal
+        showModal={showModal}
+        modalTask={modalTask}
+        index={index}
+        onConfirmModal={onConfirmTask}
+        onCancelModal={() => setShowmodal(!showModal)}
+      />
       <View style={styles.listTask}>
         <ScrollView style={{paddingHorizontal: 12}}>
           {listTask.map((item, index) => {
             return (
-              <TodoTask
+              <TaskTile
                 task={listTask[index]}
                 onPressDone={() => setTaskStatusAtIndex(index)}
                 onPressRemove={() => removeTaskAtIndex(index)}
+                onPressEdit={() => onPressEditAtIndex(index)}
                 key={index}
               />
             );
