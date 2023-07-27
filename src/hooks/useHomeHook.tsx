@@ -5,6 +5,7 @@ import {
   getStringFromsaveToMMKVStorage,
   saveToMMKVStorage,
 } from '../utils/MMKVStorage';
+import {API_KEY} from '@env';
 
 interface HomeHookReturnValue {
   task: string;
