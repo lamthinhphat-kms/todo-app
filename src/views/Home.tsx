@@ -1,6 +1,5 @@
 import {
   ScrollView,
-  Keyboard,
   TextInput,
   TouchableOpacity,
   View,
@@ -9,70 +8,24 @@ import {
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import TaskTile from '../components/TaskTile';
-import {useEffect, useState} from 'react';
-import {ITask} from '../../models/ITask';
-import {
-  getValueFromLocalStorage,
-  saveToLocalStorage,
-} from '../../utils/AsyncStorage';
 import EditModal from '../components/EditModal';
+import useHomeHook from '../hooks/useHomeHook';
 
 function Home(): JSX.Element {
-  const [task, setTask] = useState<string>('');
-  const [listTask, setListTask] = useState<ITask[]>([]);
-  const [showModal, setShowmodal] = useState<boolean>(false);
-  const [index, setIndex] = useState<number>(-1);
-  const [modalTask, setModalTask] = useState<ITask>({
-    title: '',
-    isCompleted: false,
-  });
-
-  useEffect(() => {
-    getTaskFromStorage();
-  }, []);
-
-  useEffect(() => {
-    saveToLocalStorage('tasks', JSON.stringify(listTask));
-  }, [listTask]);
-
-  const addTask = () => {
-    if (!(task.length === 0)) {
-      Keyboard.dismiss();
-      setListTask([...listTask, {title: task, isCompleted: false}]);
-      setTask('');
-    }
-  };
-
-  const getTaskFromStorage = async () => {
-    const tempValue = await getValueFromLocalStorage('tasks');
-    setListTask(JSON.parse(tempValue));
-  };
-
-  const setTaskStatusAtIndex = (index: number) => {
-    let task: ITask = {
-      ...listTask[index],
-      isCompleted: !listTask[index].isCompleted,
-    };
-    listTask[index] = task;
-    setListTask([...listTask]);
-  };
-
-  const removeTaskAtIndex = (index: number) => {
-    listTask.splice(index, 1);
-    setListTask([...listTask]);
-  };
-
-  const onPressEditAtIndex = (index: number) => {
-    setModalTask(listTask[index]);
-    setIndex(index);
-    setShowmodal(!showModal);
-  };
-
-  const onConfirmTask = (task: ITask, index: number) => {
-    listTask[index] = task;
-    setListTask([...listTask]);
-    setShowmodal(!showModal);
-  };
+  const {
+    task,
+    listTask,
+    showModal,
+    index,
+    modalTask,
+    setTask,
+    setShowmodal,
+    addTask,
+    setTaskStatusAtIndex,
+    removeTaskAtIndex,
+    onPressEditAtIndex,
+    onConfirmTask,
+  } = useHomeHook();
 
   return (
     <View

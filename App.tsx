@@ -8,7 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import Home from './src/views/pages/Home';
+import Home from './src/views/Home';
 
 type SectionProps = PropsWithChildren<{
   title: string;

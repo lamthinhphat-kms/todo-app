@@ -1,4 +1,4 @@
-import {ITask} from '../../models/ITask';
+import {ITask} from '../models/ITask';
 import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, Text, TextInput, View} from 'react-native';
 

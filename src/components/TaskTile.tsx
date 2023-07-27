@@ -1,7 +1,7 @@
 import {PropsWithChildren, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {ITask} from '../../models/ITask';
+import {ITask} from '../models/ITask';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
