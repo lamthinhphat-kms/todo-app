@@ -8,8 +8,8 @@ import {
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateTaskListAction} from '../redux/TaskList/TaskListAction';
 import {taskListSelector} from '../redux/selectors';
+import taskListSlice from '../redux/TaskList/taskListSlice';
 
 interface HomeHookReturnValue {
   task: string;
@@ -25,7 +25,11 @@ const useHomeHook = (): HomeHookReturnValue => {
   useEffect(() => {
     const tempValue = getStringFromsaveToMMKVStorage('tasks');
     if (tempValue != null) {
-      dispatch(updateTaskListAction(JSON.parse(tempValue)));
+      dispatch(
+        taskListSlice.actions.updateTaskList({
+          listTask: JSON.parse(tempValue),
+        }),
+      );
     }
   }, []);
 

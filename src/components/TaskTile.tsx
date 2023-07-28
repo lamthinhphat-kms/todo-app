@@ -3,12 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ITask} from '../models/ITask';
 import {useDispatch} from 'react-redux';
-import {showModalAction} from '../redux/Modal/ModalAction';
-import {
-  editTaskAction,
-  setStatusTaskAction,
-  removeTaskAction,
-} from '../redux/TaskList/TaskListAction';
+import taskListSlice from '../redux/TaskList/taskListSlice';
+import modalSlice from '../redux/Modal/modalSlice';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
@@ -31,8 +27,8 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
         {!task.isCompleted && (
           <TouchableOpacity
             onPress={() => {
-              dispatch(editTaskAction(task));
-              dispatch(showModalAction());
+              dispatch(taskListSlice.actions.editTask({modalTask: task}));
+              dispatch(modalSlice.actions.showModal({}));
             }}>
             <MaterialIcons
               name="edit"
@@ -44,7 +40,10 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
         )}
         <View style={{width: 8}} />
         {!task.isCompleted && (
-          <TouchableOpacity onPress={() => dispatch(setStatusTaskAction(task))}>
+          <TouchableOpacity
+            onPress={() =>
+              dispatch(taskListSlice.actions.setStatusTask({modalTask: task}))
+            }>
             <MaterialIcons
               name="done"
               style={{backgroundColor: 'green', padding: 4, borderRadius: 4}}
@@ -54,7 +53,10 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
           </TouchableOpacity>
         )}
         <View style={{width: 8}} />
-        <TouchableOpacity onPress={() => dispatch(removeTaskAction(task))}>
+        <TouchableOpacity
+          onPress={() =>
+            dispatch(taskListSlice.actions.removeTask({modalTask: task}))
+          }>
           <MaterialIcons
             name="delete"
             style={{backgroundColor: 'red', padding: 4, borderRadius: 4}}

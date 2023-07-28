@@ -1,5 +1,5 @@
-export const showModalAction = () => {
-  return {
-    type: 'showModal',
-  };
-};
+// export const showModalAction = () => {
+//   return {
+//     type: 'showModal',
+//   };
+// };

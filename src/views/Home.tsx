@@ -16,7 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
 import {showModalSelector, taskListSelector} from '../redux/selectors';
-import {addTaskAction} from '../redux/TaskList/TaskListAction';
+import taskListSlice from '../redux/TaskList/taskListSlice';
 
 function Home(): JSX.Element {
   const dispatch = useDispatch();
@@ -27,10 +27,12 @@ function Home(): JSX.Element {
     Keyboard.dismiss();
     setTask('');
     dispatch(
-      addTaskAction({
-        id: uuid(),
-        title: task,
-        isCompleted: false,
+      taskListSlice.actions.addTask({
+        modalTask: {
+          id: uuid(),
+          title: task,
+          isCompleted: false,
+        },
       }),
     );
   };

@@ -3,8 +3,8 @@ import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, Text, TextInput, View} from 'react-native';
 import {modalTaskSelector, showModalSelector} from '../redux/selectors';
 import {useDispatch, useSelector} from 'react-redux';
-import {showModalAction} from '../redux/Modal/ModalAction';
-import {confirmEditTaskAction} from '../redux/TaskList/TaskListAction';
+import modalSlice from '../redux/Modal/modalSlice';
+import taskListSlice from '../redux/TaskList/taskListSlice';
 
 type EditTaskProp = PropsWithChildren<{}>;
 
@@ -50,19 +50,21 @@ export default function EditModal(props: EditTaskProp): JSX.Element {
             <View style={{marginRight: 8}}>
               <Button
                 title="cancel"
-                onPress={() => dispatch(showModalAction())}
+                onPress={() => dispatch(modalSlice.actions.showModal({}))}
               />
             </View>
             <Button
               title="confirm"
               onPress={() => {
                 dispatch(
-                  confirmEditTaskAction({
-                    ...modalTask,
-                    title: title,
+                  taskListSlice.actions.confirmEditTask({
+                    modalTask: {
+                      ...modalTask,
+                      title: title,
+                    },
                   }),
                 );
-                dispatch(showModalAction());
+                dispatch(modalSlice.actions.showModal({}));
               }}
               color={'green'}
             />
