@@ -9,6 +9,8 @@ import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import Home from './src/views/Home';
+import {Provider} from 'react-redux';
+import store from './src/redux/store';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -16,9 +18,11 @@ type SectionProps = PropsWithChildren<{
 
 function App(): JSX.Element {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Home />
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={{flex: 1}}>
+        <Home />
+      </SafeAreaView>
+    </Provider>
   );
 }
 

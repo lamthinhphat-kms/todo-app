@@ -4,55 +4,49 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  FlatList,
+  Keyboard,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import TaskTile from '../components/TaskTile';
 import EditModal from '../components/EditModal';
 import useHomeHook from '../hooks/useHomeHook';
+import {useDispatch, useSelector} from 'react-redux';
+import 'react-native-get-random-values';
+import {v4 as uuid} from 'uuid';
+import {showModalSelector, taskListSelector} from '../redux/selectors';
+import {addTaskAction} from '../redux/TaskList/TaskListAction';
 
 function Home(): JSX.Element {
-  const {
-    task,
-    listTask,
-    showModal,
-    index,
-    modalTask,
-    setTask,
-    setShowmodal,
-    addTask,
-    setTaskStatusAtIndex,
-    removeTaskAtIndex,
-    onPressEditAtIndex,
-    onConfirmTask,
-  } = useHomeHook();
+  const dispatch = useDispatch();
+  const taskList = useSelector(taskListSelector);
+  const {task, setTask} = useHomeHook();
+
+  const onPressAdd = () => {
+    Keyboard.dismiss();
+    setTask('');
+    dispatch(
+      addTaskAction({
+        id: uuid(),
+        title: task,
+        isCompleted: false,
+      }),
+    );
+  };
 
   return (
     <View
       style={{
         flex: 1,
       }}>
-      <EditModal
-        showModal={showModal}
-        modalTask={modalTask}
-        index={index}
-        onConfirmModal={onConfirmTask}
-        onCancelModal={() => setShowmodal(!showModal)}
-      />
+      <EditModal />
       <View style={styles.listTask}>
-        <ScrollView style={{paddingHorizontal: 12}}>
-          {listTask.map((item, index) => {
-            return (
-              <TaskTile
-                task={listTask[index]}
-                onPressDone={() => setTaskStatusAtIndex(index)}
-                onPressRemove={() => removeTaskAtIndex(index)}
-                onPressEdit={() => onPressEditAtIndex(index)}
-                key={index}
-              />
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          data={taskList}
+          renderItem={({item}) => <TaskTile task={item} />}
+          keyExtractor={item => item.id}
+        />
       </View>
       <View style={styles.inputRow}>
         <TextInput
@@ -60,9 +54,9 @@ function Home(): JSX.Element {
           placeholder="Write a task"
           value={task}
           onChangeText={newText => setTask(newText)}
-          onSubmitEditing={addTask}
+          onSubmitEditing={onPressAdd}
         />
-        <TouchableOpacity onPress={addTask}>
+        <TouchableOpacity onPress={onPressAdd}>
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>
       </View>
@@ -71,7 +65,7 @@ function Home(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  listTask: {flex: 1, marginVertical: 12},
+  listTask: {flex: 1, marginVertical: 12, marginHorizontal: 12},
   inputRow: {
     paddingVertical: 12,
     paddingHorizontal: 8,

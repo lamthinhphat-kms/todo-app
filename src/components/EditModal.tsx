@@ -1,23 +1,24 @@
 import {ITask} from '../models/ITask';
 import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, Text, TextInput, View} from 'react-native';
+import {modalTaskSelector, showModalSelector} from '../redux/selectors';
+import {useDispatch, useSelector} from 'react-redux';
+import {showModalAction} from '../redux/Modal/ModalAction';
+import {confirmEditTaskAction} from '../redux/TaskList/TaskListAction';
 
-type EditTaskProp = PropsWithChildren<{
-  showModal: boolean;
-  modalTask: ITask;
-  index: number;
-  onCancelModal(): void;
-  onConfirmModal(task: ITask, index: number): void;
-}>;
+type EditTaskProp = PropsWithChildren<{}>;
 
 export default function EditModal(props: EditTaskProp): JSX.Element {
+  const showModal = useSelector(showModalSelector);
+  const modalTask = useSelector(modalTaskSelector);
   const [title, setTitle] = useState<string>('');
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setTitle(props.modalTask.title);
-  }, [props.showModal]);
+    setTitle(modalTask.title);
+  }, [showModal]);
   return (
-    <Modal visible={props.showModal} transparent={true}>
+    <Modal visible={showModal} transparent={true}>
       <View
         style={{
           flex: 1,
@@ -47,18 +48,21 @@ export default function EditModal(props: EditTaskProp): JSX.Element {
               paddingBottom: 4,
             }}>
             <View style={{marginRight: 8}}>
-              <Button title="cancel" onPress={props.onCancelModal} />
+              <Button
+                title="cancel"
+                onPress={() => dispatch(showModalAction())}
+              />
             </View>
             <Button
               title="confirm"
               onPress={() => {
-                props.onConfirmModal(
-                  {
+                dispatch(
+                  confirmEditTaskAction({
+                    ...modalTask,
                     title: title,
-                    isCompleted: props.modalTask.isCompleted,
-                  },
-                  props.index,
+                  }),
                 );
+                dispatch(showModalAction());
               }}
               color={'green'}
             />

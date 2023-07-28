@@ -2,16 +2,22 @@ import {PropsWithChildren, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ITask} from '../models/ITask';
+import {useDispatch} from 'react-redux';
+import {showModalAction} from '../redux/Modal/ModalAction';
+import {
+  editTaskAction,
+  setStatusTaskAction,
+  removeTaskAction,
+} from '../redux/TaskList/TaskListAction';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
-  onPressDone(): void;
-  onPressRemove(): void;
-  onPressEdit(): void;
 }>;
 
 export default function TaskTile(prop: TaskProp): JSX.Element {
   const {task} = prop;
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.task}>
       <Text
@@ -23,7 +29,11 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
       </Text>
       <View style={{flexDirection: 'row'}}>
         {!task.isCompleted && (
-          <TouchableOpacity onPress={prop.onPressEdit}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(editTaskAction(task));
+              dispatch(showModalAction());
+            }}>
             <MaterialIcons
               name="edit"
               style={{backgroundColor: 'grey', padding: 4, borderRadius: 4}}
@@ -34,7 +44,7 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
         )}
         <View style={{width: 8}} />
         {!task.isCompleted && (
-          <TouchableOpacity onPress={prop.onPressDone}>
+          <TouchableOpacity onPress={() => dispatch(setStatusTaskAction(task))}>
             <MaterialIcons
               name="done"
               style={{backgroundColor: 'green', padding: 4, borderRadius: 4}}
@@ -44,7 +54,7 @@ export default function TaskTile(prop: TaskProp): JSX.Element {
           </TouchableOpacity>
         )}
         <View style={{width: 8}} />
-        <TouchableOpacity onPress={prop.onPressRemove}>
+        <TouchableOpacity onPress={() => dispatch(removeTaskAction(task))}>
           <MaterialIcons
             name="delete"
             style={{backgroundColor: 'red', padding: 4, borderRadius: 4}}
