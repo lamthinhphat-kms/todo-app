@@ -11,12 +11,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {taskListSelector} from '../redux/selectors';
 import taskListSlice from '../redux/TaskList/taskListSlice';
 
-interface HomeHookReturnValue {
+interface ToDoStoreHookReturnValue {
   task: string;
   setTask: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const useHomeHook = (): HomeHookReturnValue => {
+const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
   const dispatch = useDispatch();
   const taskList = useSelector(taskListSelector);
 
@@ -43,4 +43,4 @@ const useHomeHook = (): HomeHookReturnValue => {
   };
 };
 
-export default useHomeHook;
+export default useToDoStoreHook;

@@ -1,14 +1,13 @@
-import {ITask} from '../models/ITask';
 import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, Text, TextInput, View} from 'react-native';
-import {modalTaskSelector, showModalSelector} from '../redux/selectors';
 import {useDispatch, useSelector} from 'react-redux';
-import modalSlice from '../redux/Modal/modalSlice';
-import taskListSlice from '../redux/TaskList/taskListSlice';
+import modalSlice from '../../../redux/Modal/modalSlice';
+import taskListSlice from '../../../redux/TaskList/taskListSlice';
+import {showModalSelector, modalTaskSelector} from '../../../redux/selectors';
 
 type EditTaskProp = PropsWithChildren<{}>;
 
-export default function EditModal(props: EditTaskProp): JSX.Element {
+export default function EditModalStore(props: EditTaskProp): JSX.Element {
   const showModal = useSelector(showModalSelector);
   const modalTask = useSelector(modalTaskSelector);
   const [title, setTitle] = useState<string>('');

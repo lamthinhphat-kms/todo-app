@@ -6,22 +6,24 @@ import {
   StyleSheet,
   FlatList,
   Keyboard,
+  SafeAreaView,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-import TaskTile from '../components/TaskTile';
-import EditModal from '../components/EditModal';
-import useHomeHook from '../hooks/useHomeHook';
+import TaskTile from './components/TaskTileStore';
+
 import {useDispatch, useSelector} from 'react-redux';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
-import {showModalSelector, taskListSelector} from '../redux/selectors';
-import taskListSlice from '../redux/TaskList/taskListSlice';
+import {showModalSelector, taskListSelector} from '../../redux/selectors';
+import taskListSlice from '../../redux/TaskList/taskListSlice';
+import EditModalStore from './components/EditModalStore';
+import useToDoStoreHook from '../../hooks/useToDoStoreHook';
 
-function Home(): JSX.Element {
+function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
   const taskList = useSelector(taskListSelector);
-  const {task, setTask} = useHomeHook();
+  const {task, setTask} = useToDoStoreHook();
 
   const onPressAdd = () => {
     Keyboard.dismiss();
@@ -38,11 +40,11 @@ function Home(): JSX.Element {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
       }}>
-      <EditModal />
+      <EditModalStore />
       <View style={styles.listTask}>
         <FlatList
           data={taskList}
@@ -62,7 +64,7 @@ function Home(): JSX.Element {
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -84,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default ToDoListStore;
