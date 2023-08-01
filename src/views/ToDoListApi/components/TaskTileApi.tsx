@@ -52,7 +52,7 @@ export default function TaskTileApi(props: TaskTileProps) {
           <TouchableOpacity
             onPress={() => {
               props.setTaskModel(task);
-              props.setShowModal(true);
+              props.setShowModal(prevShowModal => !prevShowModal);
             }}>
             <MaterialIcons
               name="edit"

@@ -23,7 +23,7 @@ export default function ModalEditApi(props: ModalEditProps): JSX.Element {
     mutationFn: updateTask,
     onSuccess: data => {
       setTitle(''), Keyboard.dismiss();
-      props.setShowModal(!props.showModal);
+      props.setShowModal(prevShowModal => !prevShowModal);
       queryClient.invalidateQueries(['tasks'], {exact: true});
     },
   });
@@ -65,7 +65,7 @@ export default function ModalEditApi(props: ModalEditProps): JSX.Element {
               <Button
                 title="cancel"
                 onPress={() => {
-                  props.setShowModal(!props.showModal);
+                  props.setShowModal(prevShowModal => !prevShowModal);
                 }}
               />
             </View>

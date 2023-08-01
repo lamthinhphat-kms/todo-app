@@ -15,6 +15,10 @@ import {createTask, getTasks} from '../../api/tasks';
 import TaskTileApi from './components/TaskTileApi';
 import useToDoApiHook from '../../hooks/useToDoApiHook';
 import ModalEditApi from './components/ModalEditApi';
+import {
+  useReactNavigationQuery,
+  useRefetchOnFocus,
+} from '../../hooks/useRefetchOnFocus';
 
 function ToDoListApi(): JSX.Element {
   const {task, setTask, showModal, setShowModal, taskModel, setTaskModel} =
@@ -25,6 +29,11 @@ function ToDoListApi(): JSX.Element {
     queryKey: ['tasks'],
     queryFn: getTasks,
   });
+  useRefetchOnFocus(taskQuery.refetch);
+
+  // const taskQuery = useReactNavigationQuery(['tasks'], getTasks, {
+  //   refetchOnWindowFocus: true,
+  // });
 
   const createTaskMutation = useMutation({
     mutationFn: createTask,
