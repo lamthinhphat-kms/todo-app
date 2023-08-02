@@ -5,7 +5,6 @@ import {delay} from '@reduxjs/toolkit/dist/utils';
 
 export async function getTasks(): Promise<ITask[]> {
   try {
-    console.log('getTask');
     const response = await axios.get(`${BASE_URL}/tasks`);
     return response.data;
   } catch (error) {

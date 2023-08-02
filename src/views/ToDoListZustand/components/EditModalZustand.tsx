@@ -1,20 +1,18 @@
 import {PropsWithChildren, useEffect, useState} from 'react';
-import {Button, Modal, StyleSheet, Text, TextInput, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import modalSlice from '../../../redux/Modal/modalSlice';
-import taskListSlice from '../../../redux/TaskList/taskListSlice';
-import {showModalSelector, modalTaskSelector} from '../../../redux/selectors';
-
-type EditTaskProp = PropsWithChildren<{}>;
-
-export default function EditModalStore(props: EditTaskProp): JSX.Element {
-  const showModal = useSelector(showModalSelector);
-  const modalTask = useSelector(modalTaskSelector);
+import {Button, Modal, StyleSheet, TextInput, View} from 'react-native';
+import {zustandStore} from '../../../zustand/store';
+type EditModalZustandProps = PropsWithChildren<{}>;
+export function EditModalZustand(props: EditModalZustandProps) {
+  const showModal = zustandStore(store => store.showModal);
+  const setShowModal = zustandStore(store => store.setShowModal);
+  const taskModal = zustandStore(store => store.taskModal);
   const [title, setTitle] = useState<string>('');
-  const dispatch = useDispatch();
+
+  const updateTask = zustandStore(store => store.updateTask);
   useEffect(() => {
-    setTitle(modalTask.title);
+    setTitle(taskModal.title);
   }, [showModal]);
+
   return (
     <Modal visible={showModal} transparent={true}>
       <View style={styles.background}>
@@ -27,21 +25,16 @@ export default function EditModalStore(props: EditTaskProp): JSX.Element {
             <View style={{marginRight: 8}}>
               <Button
                 title="cancel"
-                onPress={() => dispatch(modalSlice.actions.showModal({}))}
+                onPress={() => {
+                  setShowModal(false);
+                }}
               />
             </View>
             <Button
               title="confirm"
               onPress={() => {
-                dispatch(
-                  taskListSlice.actions.confirmEditTask({
-                    modalTask: {
-                      ...modalTask,
-                      title: title,
-                    },
-                  }),
-                );
-                dispatch(modalSlice.actions.showModal({}));
+                updateTask({...taskModal, title: title});
+                setShowModal(false);
               }}
               color={'green'}
             />

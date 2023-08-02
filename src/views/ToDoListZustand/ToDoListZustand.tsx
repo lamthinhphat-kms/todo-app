@@ -1,55 +1,46 @@
 import {
-  ScrollView,
+  FlatList,
+  Keyboard,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
-  StyleSheet,
-  FlatList,
-  Keyboard,
-  SafeAreaView,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {zustandStore} from '../../zustand/store';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-import TaskTile from './components/TaskTileStore';
 
-import {useDispatch, useSelector} from 'react-redux';
-import 'react-native-get-random-values';
+import {useToDoListZustandHook} from '../../hooks/useToDoZustandHook';
 import {v4 as uuid} from 'uuid';
-import {showModalSelector, taskListSelector} from '../../redux/selectors';
-import taskListSlice from '../../redux/TaskList/taskListSlice';
-import EditModalStore from './components/EditModalStore';
-import useToDoStoreHook from '../../hooks/useToDoStoreHook';
+import TaskTileZustand from './components/TaskTileZustand';
+import {EditModalZustand} from './components/EditModalZustand';
 
-function ToDoListStore(): JSX.Element {
-  const dispatch = useDispatch();
-  const taskList = useSelector(taskListSelector);
-  const {task, setTask} = useToDoStoreHook();
+function ToDoListZustand() {
+  const {task, setTask} = useToDoListZustandHook();
+  const taskList = zustandStore(store => store.taskList);
+  const addTaskZustand = zustandStore(store => store.addTask);
 
   const onPressAdd = () => {
-    console.log('onPress');
     Keyboard.dismiss();
     setTask('');
-    dispatch(
-      taskListSlice.actions.addTask({
-        modalTask: {
-          id: uuid(),
-          title: task,
-          isCompleted: false,
-        },
-      }),
-    );
+    addTaskZustand({
+      id: uuid(),
+      title: task,
+      isCompleted: false,
+    });
   };
-
   return (
     <SafeAreaView
       style={{
         flex: 1,
       }}>
-      <EditModalStore />
-      <View style={styles.listTask}>
+      <EditModalZustand />
+      <View style={{flex: 1}}>
         <FlatList
           data={taskList}
-          renderItem={({item}) => <TaskTile task={item} />}
+          renderItem={({item}) => <TaskTileZustand task={item} />}
           keyExtractor={item => item.id}
         />
       </View>
@@ -59,7 +50,6 @@ function ToDoListStore(): JSX.Element {
           placeholder="Write a task"
           value={task}
           onChangeText={newText => setTask(newText)}
-          onSubmitEditing={onPressAdd}
         />
         <TouchableOpacity onPress={onPressAdd}>
           <Icon name="pluscircle" size={30} />
@@ -87,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ToDoListStore;
+export default ToDoListZustand;

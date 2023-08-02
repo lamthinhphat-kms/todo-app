@@ -23,7 +23,6 @@ const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
   const [task, setTask] = useState<string>('');
 
   useEffect(() => {
-    console.log('getStringFromsaveToMMKVStorage');
     const tempValue = getStringFromsaveToMMKVStorage('tasks');
     if (tempValue != null) {
       dispatch(
@@ -35,7 +34,6 @@ const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
   }, []);
 
   useEffect(() => {
-    console.log('saveToMMKVStorage');
     saveToMMKVStorage('tasks', JSON.stringify(taskList));
   }, [taskList]);
 
