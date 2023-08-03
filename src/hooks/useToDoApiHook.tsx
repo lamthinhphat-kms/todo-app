@@ -1,5 +1,7 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {ITask} from 'models/ITask';
+import {ViewToken} from 'react-native';
+import Animated, {useSharedValue} from 'react-native-reanimated';
 
 interface ToDoApiHookReturnValue {
   task: string;
@@ -10,6 +12,14 @@ interface ToDoApiHookReturnValue {
   setTaskString: React.Dispatch<React.SetStateAction<string>>;
   taskModel: ITask;
   setTaskModel: React.Dispatch<React.SetStateAction<ITask>>;
+  onViewCallBack: ({
+    viewableItems,
+    changed,
+  }: {
+    viewableItems: ViewToken[];
+    changed: ViewToken[];
+  }) => void;
+  sharedViewAbleItems: Animated.SharedValue<ViewToken[]>;
 }
 
 const useToDoApiHook = (): ToDoApiHookReturnValue => {
@@ -21,6 +31,20 @@ const useToDoApiHook = (): ToDoApiHookReturnValue => {
     title: '',
     isCompleted: false,
   });
+  const sharedViewAbleItems = useSharedValue<ViewToken[]>([]);
+
+  const onViewCallBack = useCallback(
+    ({
+      viewableItems,
+      changed,
+    }: {
+      viewableItems: ViewToken[];
+      changed: ViewToken[];
+    }) => {
+      sharedViewAbleItems.value = viewableItems;
+    },
+    [],
+  );
 
   return {
     task,
@@ -31,6 +55,8 @@ const useToDoApiHook = (): ToDoApiHookReturnValue => {
     setTaskString,
     taskModel,
     setTaskModel,
+    onViewCallBack,
+    sharedViewAbleItems,
   };
 };
 

@@ -1,25 +1,38 @@
-import {PropsWithChildren} from 'react';
+import {PropsWithChildren, memo, useEffect} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewToken,
 } from 'react-native';
 import {ITask} from 'models/ITask';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {deleteTask, updateTask} from 'api/tasks';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  FadeOutRight,
+  Layout,
+  ZoomOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setTaskModel: React.Dispatch<React.SetStateAction<ITask>>;
+  sharedViewAbleItems: Animated.SharedValue<ViewToken[]>;
 }>;
 
-export default function TaskTileApi(props: TaskTileProps) {
+function TaskTileApi(props: TaskTileProps) {
   const {task} = props;
   const queryClient = useQueryClient();
+  const animationValue = useSharedValue<number>(0);
   const updateTaskMuatation = useMutation({
     mutationFn: updateTask,
     onSuccess: data => {
@@ -33,9 +46,34 @@ export default function TaskTileApi(props: TaskTileProps) {
       queryClient.invalidateQueries(['tasks'], {exact: true});
     },
   });
+  const rStyle = useAnimatedStyle(() => {
+    animationValue.value = Boolean(
+      props.sharedViewAbleItems.value
+        .filter(item => item.isViewable)
+        .find(viewAbleItem => viewAbleItem.item.id === task.id),
+    )
+      ? withTiming(1)
+      : withTiming(0);
+    return {
+      opacity: animationValue.value,
+      transform: [
+        {
+          scale: animationValue.value,
+        },
+      ],
+    };
+  }, []);
+  useEffect(() => {
+    return () => {
+      animationValue.value = withTiming(0);
+    };
+  }, []);
 
   return (
-    <View style={styles.task}>
+    <Animated.View
+      exiting={ZoomOut}
+      layout={Layout.delay(2000)}
+      style={[styles.task, rStyle]}>
       <Text
         style={{
           ...styles.text,
@@ -105,7 +143,7 @@ export default function TaskTileApi(props: TaskTileProps) {
           )}
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 const styles = StyleSheet.create({
@@ -134,3 +172,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+export default memo(TaskTileApi);

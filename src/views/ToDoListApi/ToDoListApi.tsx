@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ViewToken,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {createTask, getTasks} from 'api/tasks';
@@ -19,10 +20,19 @@ import {
   useReactNavigationQuery,
   useRefetchOnFocus,
 } from 'hooks/useRefetchOnFocus';
+import {useSharedValue} from 'react-native-reanimated';
 
 function ToDoListApi(): JSX.Element {
-  const {task, setTask, showModal, setShowModal, taskModel, setTaskModel} =
-    useToDoApiHook();
+  const {
+    task,
+    setTask,
+    showModal,
+    setShowModal,
+    taskModel,
+    setTaskModel,
+    onViewCallBack,
+    sharedViewAbleItems,
+  } = useToDoApiHook();
   const queryClient = useQueryClient();
 
   const taskQuery = useQuery({
@@ -64,11 +74,13 @@ function ToDoListApi(): JSX.Element {
         ) : (
           <FlatList
             data={taskQuery.data}
+            onViewableItemsChanged={onViewCallBack}
             renderItem={({item}) => (
               <TaskTileApi
                 task={item}
                 setShowModal={setShowModal}
                 setTaskModel={setTaskModel}
+                sharedViewAbleItems={sharedViewAbleItems}
               />
             )}
             keyExtractor={item => item.id}
