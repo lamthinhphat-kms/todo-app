@@ -1,9 +1,9 @@
 import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import modalSlice from '../../../redux/Modal/modalSlice';
-import taskListSlice from '../../../redux/TaskList/taskListSlice';
-import {showModalSelector, modalTaskSelector} from '../../../redux/selectors';
+import modalSlice from 'redux/Modal/modalSlice';
+import taskListSlice from 'redux/TaskList/taskListSlice';
+import {showModalSelector, modalTaskSelector} from 'redux/selectors';
 
 type EditTaskProp = PropsWithChildren<{}>;
 

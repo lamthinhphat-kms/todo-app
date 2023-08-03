@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
-import {zustandStore} from '../zustand/store';
+import {zustandStore} from 'zustand/store';
 import {
   getStringFromsaveToMMKVStorage,
   saveToMMKVStorage,
-} from '../utils/MMKVStorage';
+} from 'utils/MMKVStorage';
 
 interface ToDoListZustandReturnValue {
   task: string;

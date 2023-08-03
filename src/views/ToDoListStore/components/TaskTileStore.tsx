@@ -1,10 +1,10 @@
 import {PropsWithChildren, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {ITask} from '../../../models/ITask';
+import {ITask} from 'models/ITask';
 import {useDispatch} from 'react-redux';
-import taskListSlice from '../../../redux/TaskList/taskListSlice';
-import modalSlice from '../../../redux/Modal/modalSlice';
+import taskListSlice from 'redux/TaskList/taskListSlice';
+import modalSlice from 'redux/Modal/modalSlice';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;

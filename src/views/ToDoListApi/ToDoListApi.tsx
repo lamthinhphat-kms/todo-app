@@ -11,14 +11,14 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {createTask, getTasks} from '../../api/tasks';
+import {createTask, getTasks} from 'api/tasks';
 import TaskTileApi from './components/TaskTileApi';
-import useToDoApiHook from '../../hooks/useToDoApiHook';
+import useToDoApiHook from 'hooks/useToDoApiHook';
 import ModalEditApi from './components/ModalEditApi';
 import {
   useReactNavigationQuery,
   useRefetchOnFocus,
-} from '../../hooks/useRefetchOnFocus';
+} from 'hooks/useRefetchOnFocus';
 
 function ToDoListApi(): JSX.Element {
   const {task, setTask, showModal, setShowModal, taskModel, setTaskModel} =

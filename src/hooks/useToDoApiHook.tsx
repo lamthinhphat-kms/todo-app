@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {ITask} from '../models/ITask';
+import {ITask} from 'models/ITask';
 
 interface ToDoApiHookReturnValue {
   task: string;

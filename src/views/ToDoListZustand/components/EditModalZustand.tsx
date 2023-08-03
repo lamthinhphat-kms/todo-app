@@ -1,6 +1,7 @@
 import {PropsWithChildren, useEffect, useState} from 'react';
 import {Button, Modal, StyleSheet, TextInput, View} from 'react-native';
-import {zustandStore} from '../../../zustand/store';
+import {zustandStore} from 'zustand/store';
+
 type EditModalZustandProps = PropsWithChildren<{}>;
 export function EditModalZustand(props: EditModalZustandProps) {
   const showModal = zustandStore(store => store.showModal);

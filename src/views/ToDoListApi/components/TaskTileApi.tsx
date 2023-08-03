@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ITask} from '../../../models/ITask';
+import {ITask} from 'models/ITask';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteTask, updateTask} from '../../../api/tasks';
+import {deleteTask, updateTask} from 'api/tasks';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;

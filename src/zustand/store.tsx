@@ -1,7 +1,7 @@
-import {ITask} from '../models/ITask';
 import {createWithEqualityFn} from 'zustand/traditional';
 import {shallow} from 'zustand/shallow';
 import {produce} from 'immer';
+import {ITask} from 'models/ITask';
 
 interface TaskState {
   taskList: ITask[];

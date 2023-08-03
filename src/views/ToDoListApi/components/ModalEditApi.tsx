@@ -1,5 +1,5 @@
 import {PropsWithChildren, useEffect, useState} from 'react';
-import {ITask} from '../../../models/ITask';
+import {ITask} from 'models/ITask';
 import {
   ActivityIndicator,
   Button,
@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {updateTask} from '../../../api/tasks';
+import {updateTask} from 'api/tasks';
 
 type ModalEditProps = PropsWithChildren<{
   task: ITask;

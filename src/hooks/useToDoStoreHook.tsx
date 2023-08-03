@@ -1,15 +1,12 @@
-import {SetStateAction, useEffect, useState} from 'react';
-import {ITask} from '../models/ITask';
-import {Keyboard} from 'react-native';
+import {useEffect, useState} from 'react';
 import {
   getStringFromsaveToMMKVStorage,
   saveToMMKVStorage,
 } from '../utils/MMKVStorage';
 import 'react-native-get-random-values';
-import {v4 as uuid} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
-import {taskListSelector} from '../redux/selectors';
-import taskListSlice from '../redux/TaskList/taskListSlice';
+import {taskListSelector} from 'redux/selectors';
+import taskListSlice from 'redux/TaskList/taskListSlice';
 
 interface ToDoStoreHookReturnValue {
   task: string;

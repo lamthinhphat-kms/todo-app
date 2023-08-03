@@ -1,7 +1,6 @@
 import axios from 'axios';
 import {BASE_URL} from '@env';
-import {ITask} from '../models/ITask';
-import {delay} from '@reduxjs/toolkit/dist/utils';
+import {ITask} from 'models/ITask';
 
 export async function getTasks(): Promise<ITask[]> {
   try {

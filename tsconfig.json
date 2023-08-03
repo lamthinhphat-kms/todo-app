@@ -1,13 +1,20 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
+    "typeRoots": ["./src/types"],
     "paths": {
-        "app/*": ["./src/app/*"],
-        "config/*": ["./src/app/_config/*"],
-        "environment/*": ["./src/environments/*"],
-        "shared/*": ["./src/app/_shared/*"],
-        "helpers/*": ["./src/helpers/*"],
-        "tests/*": ["./src/tests/*"]
-    }
+        "*": ["./src/*"],
+        "api":["./src/api"],
+        "components": ["./src/components"],
+        "constants": ["./src/constants"],
+        "hooks": ["./src/hooks"],
+        "models": ["./src/models"],
+        "navigation": ["./src/navigation"],
+        "redux": ["./src/redux"],
+        "utils": ["./src/utils"],
+        "views": ["./src/views"],
+        "zustand": ["./src/zustand"]
+    },
   }
 }

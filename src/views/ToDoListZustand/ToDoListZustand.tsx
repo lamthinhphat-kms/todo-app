@@ -1,3 +1,4 @@
+import {useToDoListZustandHook} from 'hooks/useToDoZustandHook';
 import {
   FlatList,
   Keyboard,
@@ -8,14 +9,13 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {zustandStore} from '../../zustand/store';
+import {zustandStore} from 'zustand/store';
+import {EditModalZustand} from './components/EditModalZustand';
+import TaskTileZustand from './components/TaskTileZustand';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
-import {useToDoListZustandHook} from '../../hooks/useToDoZustandHook';
 import {v4 as uuid} from 'uuid';
-import TaskTileZustand from './components/TaskTileZustand';
-import {EditModalZustand} from './components/EditModalZustand';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();

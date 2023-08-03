@@ -15,10 +15,10 @@ import TaskTile from './components/TaskTileStore';
 import {useDispatch, useSelector} from 'react-redux';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
-import {showModalSelector, taskListSelector} from '../../redux/selectors';
-import taskListSlice from '../../redux/TaskList/taskListSlice';
+import {showModalSelector, taskListSelector} from 'redux/selectors';
+import taskListSlice from 'redux/TaskList/taskListSlice';
 import EditModalStore from './components/EditModalStore';
-import useToDoStoreHook from '../../hooks/useToDoStoreHook';
+import useToDoStoreHook from 'hooks/useToDoStoreHook';
 
 function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
