@@ -1,21 +1,50 @@
 import {PropsWithChildren, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ViewToken,
+  Dimensions,
+} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {ITask} from 'models/ITask';
 import {useDispatch} from 'react-redux';
 import taskListSlice from 'redux/TaskList/taskListSlice';
 import modalSlice from 'redux/Modal/modalSlice';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
+import useToDoStoreHook from 'hooks/useToDoStoreHook';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
+  viewAbleItems: Animated.SharedValue<ViewToken[]>;
 }>;
 
+const {width, height} = Dimensions.get('window');
+
 export default function TaskTileStore(prop: TaskProp): JSX.Element {
-  const {task} = prop;
+  const {task, viewAbleItems} = prop;
   const dispatch = useDispatch();
+  const animationValue = useSharedValue<number>(-width);
+
+  const rStyle = useAnimatedStyle(() => {
+    animationValue.value = handleVisible(viewAbleItems, task);
+    return {
+      transform: [
+        {
+          translateX: animationValue.value,
+        },
+      ],
+    };
+  }, []);
 
   return (
-    <View style={styles.task}>
+    <Animated.View exiting={exiting} style={[styles.task, rStyle]}>
       <Text
         style={{
           ...styles.text,
@@ -65,9 +94,46 @@ export default function TaskTileStore(prop: TaskProp): JSX.Element {
           />
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 }
+
+const handleVisible = (
+  viewAbleItems: Animated.SharedValue<ViewToken[]>,
+  task: ITask,
+) => {
+  'worklet';
+  return Boolean(
+    viewAbleItems.value
+      .filter(item => item.isViewable)
+      .find(viewableItem => viewableItem.item.id === task.id),
+  )
+    ? withSpring(0)
+    : withSpring(-width);
+};
+
+const exiting = (values: any) => {
+  'worklet';
+  const animations = {
+    transform: [
+      {
+        translateX: withSpring(width),
+      },
+    ],
+  };
+  const initialValues = {
+    transform: [
+      {
+        translateX: 0,
+      },
+    ],
+  };
+  return {
+    initialValues,
+    animations,
+  };
+};
+
 const styles = StyleSheet.create({
   text: {
     fontSize: 20,

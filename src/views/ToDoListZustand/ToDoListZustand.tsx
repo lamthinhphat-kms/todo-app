@@ -2,6 +2,7 @@ import {useToDoListZustandHook} from 'hooks/useToDoZustandHook';
 import {
   FlatList,
   Keyboard,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -16,6 +17,7 @@ import TaskTileZustand from './components/TaskTileZustand';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import {v4 as uuid} from 'uuid';
+import Animated, {Layout} from 'react-native-reanimated';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();
@@ -32,16 +34,18 @@ function ToDoListZustand() {
     });
   };
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
       }}>
       <EditModalZustand />
       <View style={{flex: 1}}>
-        <FlatList
+        <Animated.FlatList
+          contentContainerStyle={{flexGrow: 1}}
           data={taskList}
           renderItem={({item}) => <TaskTileZustand task={item} />}
           keyExtractor={item => item.id}
+          itemLayoutAnimation={Layout.springify()}
         />
       </View>
       <View style={styles.inputRow}>
@@ -55,7 +59,7 @@ function ToDoListZustand() {
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

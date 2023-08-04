@@ -19,14 +19,14 @@ import {showModalSelector, taskListSelector} from 'redux/selectors';
 import taskListSlice from 'redux/TaskList/taskListSlice';
 import EditModalStore from './components/EditModalStore';
 import useToDoStoreHook from 'hooks/useToDoStoreHook';
+import Animated, {Layout} from 'react-native-reanimated';
 
 function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
   const taskList = useSelector(taskListSelector);
-  const {task, setTask} = useToDoStoreHook();
+  const {task, setTask, viewAbleItems, onViewCallBack} = useToDoStoreHook();
 
   const onPressAdd = () => {
-    console.log('onPress');
     Keyboard.dismiss();
     setTask('');
     dispatch(
@@ -41,16 +41,21 @@ function ToDoListStore(): JSX.Element {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
       }}>
       <EditModalStore />
       <View style={styles.listTask}>
-        <FlatList
+        <Animated.FlatList
           data={taskList}
-          renderItem={({item}) => <TaskTile task={item} />}
+          onViewableItemsChanged={onViewCallBack}
+          renderItem={({item}) => (
+            <TaskTile task={item} viewAbleItems={viewAbleItems} />
+          )}
           keyExtractor={item => item.id}
+          itemLayoutAnimation={Layout.springify()}
+          contentContainerStyle={{flexGrow: 1}}
         />
       </View>
       <View style={styles.inputRow}>
@@ -65,7 +70,7 @@ function ToDoListStore(): JSX.Element {
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

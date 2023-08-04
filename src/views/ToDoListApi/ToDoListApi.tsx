@@ -20,7 +20,11 @@ import {
   useReactNavigationQuery,
   useRefetchOnFocus,
 } from 'hooks/useRefetchOnFocus';
-import {useSharedValue} from 'react-native-reanimated';
+import Animated, {
+  Layout,
+  SlideInRight,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -33,6 +37,7 @@ function ToDoListApi(): JSX.Element {
     onViewCallBack,
     sharedViewAbleItems,
   } = useToDoApiHook();
+
   const queryClient = useQueryClient();
 
   const taskQuery = useQuery({
@@ -62,7 +67,7 @@ function ToDoListApi(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <ModalEditApi
         task={taskModel}
         showModal={showModal}
@@ -72,7 +77,7 @@ function ToDoListApi(): JSX.Element {
         {taskQuery.isLoading ? (
           <ActivityIndicator />
         ) : (
-          <FlatList
+          <Animated.FlatList
             data={taskQuery.data}
             onViewableItemsChanged={onViewCallBack}
             renderItem={({item}) => (
@@ -84,6 +89,8 @@ function ToDoListApi(): JSX.Element {
               />
             )}
             keyExtractor={item => item.id}
+            contentContainerStyle={{flexGrow: 1}}
+            itemLayoutAnimation={Layout.springify()}
           />
         )}
       </View>
@@ -102,7 +109,7 @@ function ToDoListApi(): JSX.Element {
           )}
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

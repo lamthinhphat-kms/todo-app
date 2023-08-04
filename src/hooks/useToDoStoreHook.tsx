@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {
   getStringFromsaveToMMKVStorage,
   saveToMMKVStorage,
@@ -7,10 +7,20 @@ import 'react-native-get-random-values';
 import {useDispatch, useSelector} from 'react-redux';
 import {taskListSelector} from 'redux/selectors';
 import taskListSlice from 'redux/TaskList/taskListSlice';
+import {ViewToken} from 'react-native';
+import Animated, {useSharedValue} from 'react-native-reanimated';
 
 interface ToDoStoreHookReturnValue {
   task: string;
   setTask: React.Dispatch<React.SetStateAction<string>>;
+  onViewCallBack: ({
+    viewableItems,
+    changed,
+  }: {
+    viewableItems: ViewToken[];
+    changed: ViewToken[];
+  }) => void;
+  viewAbleItems: Animated.SharedValue<ViewToken[]>;
 }
 
 const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
@@ -18,6 +28,7 @@ const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
   const taskList = useSelector(taskListSelector);
 
   const [task, setTask] = useState<string>('');
+  const viewAbleItems = useSharedValue<ViewToken[]>([]);
 
   useEffect(() => {
     const tempValue = getStringFromsaveToMMKVStorage('tasks');
@@ -34,9 +45,24 @@ const useToDoStoreHook = (): ToDoStoreHookReturnValue => {
     saveToMMKVStorage('tasks', JSON.stringify(taskList));
   }, [taskList]);
 
+  const onViewCallBack = useCallback(
+    ({
+      viewableItems,
+      changed,
+    }: {
+      viewableItems: ViewToken[];
+      changed: ViewToken[];
+    }) => {
+      viewAbleItems.value = viewableItems;
+    },
+    [],
+  );
+
   return {
     task,
     setTask,
+    viewAbleItems,
+    onViewCallBack,
   };
 };
 

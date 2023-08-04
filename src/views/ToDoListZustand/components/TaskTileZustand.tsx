@@ -3,6 +3,13 @@ import {ITask} from 'models/ITask';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {zustandStore} from 'zustand/store';
+import Animated, {
+  ComplexAnimationBuilder,
+  FadeIn,
+  FadeOut,
+  Layout,
+  ZoomIn,
+} from 'react-native-reanimated';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
@@ -15,7 +22,7 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
   const setShowModal = zustandStore(store => store.setShowModal);
   const setTaskModal = zustandStore(store => store.setTaskModal);
   return (
-    <View style={styles.task}>
+    <Animated.View entering={ZoomIn} exiting={FadeOut} style={styles.task}>
       <Text
         style={{
           ...styles.text,
@@ -68,7 +75,7 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
           />
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 const styles = StyleSheet.create({

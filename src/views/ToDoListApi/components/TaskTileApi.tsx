@@ -12,10 +12,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {deleteTask, updateTask} from 'api/tasks';
 import Animated, {
-  FadeIn,
   FadeOut,
-  FadeOutRight,
-  Layout,
   ZoomOut,
   useAnimatedStyle,
   useSharedValue,
@@ -63,17 +60,8 @@ function TaskTileApi(props: TaskTileProps) {
       ],
     };
   }, []);
-  useEffect(() => {
-    return () => {
-      animationValue.value = withTiming(0);
-    };
-  }, []);
-
   return (
-    <Animated.View
-      exiting={ZoomOut}
-      layout={Layout.delay(2000)}
-      style={[styles.task, rStyle]}>
+    <Animated.View style={[styles.task, rStyle]}>
       <Text
         style={{
           ...styles.text,
