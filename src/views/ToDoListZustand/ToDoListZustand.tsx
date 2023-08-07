@@ -1,6 +1,5 @@
 import {useToDoListZustandHook} from 'hooks/useToDoZustandHook';
 import {
-  FlatList,
   Keyboard,
   ScrollView,
   StyleSheet,
@@ -18,11 +17,14 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import {v4 as uuid} from 'uuid';
 import Animated, {Layout} from 'react-native-reanimated';
+import {GestureHandlerRootView, FlatList} from 'react-native-gesture-handler';
+import {useRef} from 'react';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();
   const taskList = zustandStore(store => store.taskList);
   const addTaskZustand = zustandStore(store => store.addTask);
+  const showModal = zustandStore(store => store.showModal);
 
   const onPressAdd = () => {
     Keyboard.dismiss();
@@ -34,32 +36,37 @@ function ToDoListZustand() {
     });
   };
   return (
-    <View
+    <GestureHandlerRootView
       style={{
         flex: 1,
       }}>
-      <EditModalZustand />
-      <View style={{flex: 1}}>
-        <Animated.FlatList
-          contentContainerStyle={{flexGrow: 1}}
-          data={taskList}
-          renderItem={({item}) => <TaskTileZustand task={item} />}
-          keyExtractor={item => item.id}
-          itemLayoutAnimation={Layout.springify()}
-        />
+      <View
+        style={{
+          flex: 1,
+        }}>
+        <View style={{flex: 1}}>
+          <Animated.FlatList
+            contentContainerStyle={{flexGrow: 1}}
+            data={taskList}
+            renderItem={({item}) => <TaskTileZustand task={item} />}
+            keyExtractor={item => item.id}
+            itemLayoutAnimation={Layout.springify()}
+          />
+        </View>
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.input}
+            placeholder="Write a task"
+            value={task}
+            onChangeText={newText => setTask(newText)}
+          />
+          <TouchableOpacity onPress={onPressAdd}>
+            <Icon name="pluscircle" size={30} />
+          </TouchableOpacity>
+        </View>
+        {showModal ? <EditModalZustand /> : null}
       </View>
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="Write a task"
-          value={task}
-          onChangeText={newText => setTask(newText)}
-        />
-        <TouchableOpacity onPress={onPressAdd}>
-          <Icon name="pluscircle" size={30} />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 

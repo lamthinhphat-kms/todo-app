@@ -9,7 +9,7 @@ const Tab = createBottomTabNavigator();
 function BottomNavTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Store"
+      initialRouteName="Zustand"
       screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Store"
