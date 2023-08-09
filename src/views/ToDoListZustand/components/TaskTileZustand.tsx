@@ -48,7 +48,7 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
     PanGestureHandlerGestureEvent,
     ContextType
   >({
-    onStart(event, context) {
+    onStart(_event, context) {
       context.translateX = translateX.value;
     },
     onActive: (event, context) => {
@@ -167,7 +167,10 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
                 }}>
                 <MaterialIcons
                   name="edit"
-                  style={{backgroundColor: 'grey', padding: 4, borderRadius: 4}}
+                  style={[
+                    styles.flex,
+                    {backgroundColor: 'grey', padding: 4, borderRadius: 4},
+                  ]}
                   color={'white'}
                   size={20}
                 />
@@ -181,6 +184,9 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
   );
 }
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   text: {
     fontSize: 20,
     flex: 1,
