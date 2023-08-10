@@ -10,7 +10,6 @@ import {
 import {ITask} from 'models/ITask';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {deleteTask, updateTask} from 'api/tasks';
 import Animated, {
   FadeOut,
   ZoomOut,
@@ -18,6 +17,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import taskService from 'api/tasks';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;
@@ -31,14 +31,14 @@ function TaskTileApi(props: TaskTileProps) {
   const queryClient = useQueryClient();
   const animationValue = useSharedValue<number>(0);
   const updateTaskMuatation = useMutation({
-    mutationFn: updateTask,
+    mutationFn: taskService.updateTask,
     onSuccess: data => {
       queryClient.invalidateQueries(['tasks'], {exact: true});
     },
   });
 
   const deleteTaskMuatation = useMutation({
-    mutationFn: deleteTask,
+    mutationFn: taskService.deleteTask,
     onSuccess: data => {
       queryClient.invalidateQueries(['tasks'], {exact: true});
     },

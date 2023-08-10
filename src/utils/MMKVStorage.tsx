@@ -1,9 +1,16 @@
 import {MMKV} from 'react-native-mmkv';
 
-const MMKVStorage = new MMKV();
+const MMKVStorage = new MMKV({
+  id: 'token',
+  encryptionKey: 'token-secret',
+});
 
 export const saveToMMKVStorage = (key: string, value: string) => {
   MMKVStorage.set(key, value);
+};
+
+export const deleteKeyFromMMKVStorage = (key: string) => {
+  MMKVStorage.delete(key);
 };
 
 export const getStringFromsaveToMMKVStorage = (

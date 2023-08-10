@@ -28,7 +28,8 @@ module.exports = {
         redux: ["./src/redux"],
         utils: ["./src/utils"],
         views: ["./src/views"],
-        zustand: ["./src/zustand"]
+        zustand: ["./src/zustand"],
+        context: ["./src/context"],
       }
     }]
   ]

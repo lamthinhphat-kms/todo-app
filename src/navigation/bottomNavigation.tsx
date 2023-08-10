@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import ToDoListStore from 'views/ToDoListStore/ToDoListStore';
 import ToDoListApi from 'views/ToDoListApi/ToDoListApi';
 import ToDoListZustand from 'views/ToDoListZustand/ToDoListZustand';
+import AccountScreen from 'views/Account/AccountScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +36,15 @@ function BottomNavTabs() {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon name="hippo" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Icon name="user-alt" color={color} size={size} />
           ),
         }}
       />

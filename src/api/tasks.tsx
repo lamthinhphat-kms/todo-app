@@ -1,10 +1,9 @@
 import axios from 'axios';
-import {BASE_URL} from '@env';
 import {ITask} from 'models/ITask';
 
-export async function getTasks(): Promise<ITask[]> {
+async function getTasks(): Promise<ITask[]> {
   try {
-    const response = await axios.get(`${BASE_URL}/tasks`);
+    const response = await axios.get('/tasks');
     return response.data;
   } catch (error) {
     console.log(error);
@@ -12,7 +11,7 @@ export async function getTasks(): Promise<ITask[]> {
   }
 }
 
-export async function createTask({
+async function createTask({
   title,
   isCompleted,
 }: {
@@ -20,7 +19,7 @@ export async function createTask({
   isCompleted: boolean;
 }): Promise<ITask> {
   try {
-    const response = await axios.post(`${BASE_URL}/tasks`, {
+    const response = await axios.post('/tasks', {
       title: title,
       isCompleted: isCompleted,
     });
@@ -30,7 +29,7 @@ export async function createTask({
   }
 }
 
-export async function updateTask({
+async function updateTask({
   id,
   title,
   isCompleted,
@@ -40,7 +39,7 @@ export async function updateTask({
   isCompleted: boolean;
 }): Promise<ITask> {
   try {
-    const response = await axios.put(`${BASE_URL}/tasks/${id}`, {
+    const response = await axios.put(`/tasks/${id}`, {
       id: id,
       title: title,
       isCompleted: isCompleted,
@@ -51,10 +50,18 @@ export async function updateTask({
   }
 }
 
-export async function deleteTask({id}: {id: string}): Promise<void> {
+async function deleteTask({id}: {id: string}): Promise<void> {
   try {
-    await axios.delete(`${BASE_URL}/tasks/${id}`);
+    await axios.delete(`/tasks/${id}`);
   } catch (error) {
     throw error;
   }
 }
+
+const taskService = {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+};
+export default taskService;

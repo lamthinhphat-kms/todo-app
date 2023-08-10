@@ -36,37 +36,32 @@ function ToDoListZustand() {
     });
   };
   return (
-    <GestureHandlerRootView
+    <View
       style={{
         flex: 1,
       }}>
-      <View
-        style={{
-          flex: 1,
-        }}>
-        <View style={{flex: 1}}>
-          <Animated.FlatList
-            contentContainerStyle={{flexGrow: 1}}
-            data={taskList}
-            renderItem={({item}) => <TaskTileZustand task={item} />}
-            keyExtractor={item => item.id}
-            itemLayoutAnimation={Layout.springify()}
-          />
-        </View>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.input}
-            placeholder="Write a task"
-            value={task}
-            onChangeText={newText => setTask(newText)}
-          />
-          <TouchableOpacity onPress={onPressAdd}>
-            <Icon name="pluscircle" size={30} />
-          </TouchableOpacity>
-        </View>
-        {showModal ? <EditModalZustand /> : null}
+      <View style={{flex: 1}}>
+        <Animated.FlatList
+          contentContainerStyle={{flexGrow: 1}}
+          data={taskList}
+          renderItem={({item}) => <TaskTileZustand task={item} />}
+          keyExtractor={item => item.id}
+          itemLayoutAnimation={Layout.springify()}
+        />
       </View>
-    </GestureHandlerRootView>
+      <View style={styles.inputRow}>
+        <TextInput
+          style={styles.input}
+          placeholder="Write a task"
+          value={task}
+          onChangeText={newText => setTask(newText)}
+        />
+        <TouchableOpacity onPress={onPressAdd}>
+          <Icon name="pluscircle" size={30} />
+        </TouchableOpacity>
+      </View>
+      {showModal ? <EditModalZustand /> : null}
+    </View>
   );
 }
 

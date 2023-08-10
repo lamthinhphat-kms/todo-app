@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
-import {updateTask} from 'api/tasks';
+import taskService from 'api/tasks';
 
 type ModalEditProps = PropsWithChildren<{
   task: ITask;
@@ -20,7 +20,7 @@ export default function ModalEditApi(props: ModalEditProps): JSX.Element {
   const [title, setTitle] = useState<string>('');
   const queryClient = useQueryClient();
   const updateTaskMuatation = useMutation({
-    mutationFn: updateTask,
+    mutationFn: taskService.updateTask,
     onSuccess: data => {
       setTitle(''), Keyboard.dismiss();
       props.setShowModal(prevShowModal => !prevShowModal);

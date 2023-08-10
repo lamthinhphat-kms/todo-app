@@ -12,7 +12,6 @@ import {
   ViewToken,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {createTask, getTasks} from 'api/tasks';
 import TaskTileApi from './components/TaskTileApi';
 import useToDoApiHook from 'hooks/useToDoApiHook';
 import ModalEditApi from './components/ModalEditApi';
@@ -25,6 +24,7 @@ import Animated, {
   SlideInRight,
   useSharedValue,
 } from 'react-native-reanimated';
+import taskService from 'api/tasks';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -42,7 +42,7 @@ function ToDoListApi(): JSX.Element {
 
   const taskQuery = useQuery({
     queryKey: ['tasks'],
-    queryFn: getTasks,
+    queryFn: taskService.getTasks,
   });
   useRefetchOnFocus(taskQuery.refetch);
 
@@ -51,7 +51,7 @@ function ToDoListApi(): JSX.Element {
   // });
 
   const createTaskMutation = useMutation({
-    mutationFn: createTask,
+    mutationFn: taskService.createTask,
     onSuccess: data => {
       queryClient.invalidateQueries(['tasks'], {exact: true});
       Keyboard.dismiss();
