@@ -33,8 +33,8 @@ const onRequest = (config: AdaptAxiosRequestConfig) => {
       exp: number;
     }>(accessToken);
 
-    const expirationTime = exp * 1000 - 60000;
-    if (Date.now() > expirationTime) {
+    const expirationTime = exp * 1000;
+    if (Date.now() < expirationTime) {
       config.headers.Authorization = 'Bearer ' + accessToken;
     }
   }

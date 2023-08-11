@@ -5,6 +5,7 @@
  * @format
  */
 
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import axios from 'axios';
@@ -21,6 +22,12 @@ import {setupAxios} from 'utils/AuthUtils';
 
 const queryClient = new QueryClient();
 setupAxios(axios);
+
+GoogleSignin.configure({
+  webClientId:
+    '970731309100-59mfsp41tivgd2dcqpsao4emsc82bco1.apps.googleusercontent.com',
+  offlineAccess: true,
+});
 
 function App(): JSX.Element {
   return (

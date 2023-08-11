@@ -8,6 +8,10 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthContext} from 'context/AuthContext';
 import {useMutation} from '@tanstack/react-query';
 import authService from 'api/auth';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
 
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');
@@ -20,9 +24,33 @@ export function LoginScreen() {
     mutationFn: authService.login,
     onSuccess: data => {
       setAuthenticated(data.access_token, data.refresh_token);
-      setEmail(''), setPassword('');
+      setEmail('');
+      setPassword('');
     },
   });
+
+  const sendGoogleToServerMutation = useMutation({
+    mutationFn: authService.sendGoogleInfoToServer,
+    onSuccess: data => {
+      setAuthenticated(data.access_token, data.refresh_token);
+      setEmail('');
+      setPassword('');
+    },
+  });
+
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      sendGoogleToServerMutation.mutate({
+        email: userInfo.user.email,
+        firstName: userInfo.user.familyName ?? '',
+        lastName: userInfo.user.givenName ?? '',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View
@@ -31,6 +59,17 @@ export function LoginScreen() {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
+      <GoogleSigninButton
+        style={{width: 222, height: 48}}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        disabled={
+          loginMutation.isLoading || sendGoogleToServerMutation.isLoading
+            ? true
+            : false
+        }
+        onPress={signIn}
+      />
       <InputField placeholder="Email" text={email} setText={setEmail} />
       <InputField
         placeholder="Password"
@@ -38,7 +77,16 @@ export function LoginScreen() {
         setText={setPassword}
       />
       <Button
-        title={loginMutation.isLoading ? 'Loading' : 'Sign in'}
+        title={
+          loginMutation.isLoading || sendGoogleToServerMutation.isLoading
+            ? 'Loading'
+            : 'Sign in'
+        }
+        disabled={
+          loginMutation.isLoading || sendGoogleToServerMutation.isLoading
+            ? true
+            : false
+        }
         onPress={() => {
           loginMutation.mutate({
             email,

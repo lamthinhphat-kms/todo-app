@@ -1,3 +1,4 @@
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import authService from 'api/auth';
 import jwtDecode from 'jwt-decode';
 import {FC, createContext, useEffect, useState} from 'react';
@@ -41,14 +42,15 @@ export const AuthProvider: FC<Props> = ({children}) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUserToken(undefined);
     deleteKeyFromMMKVStorage('access_token');
     deleteKeyFromMMKVStorage('refresh_token');
+    await GoogleSignin.signOut();
     setIsLoading(false);
   };
 
-  const isLoggedIn = () => {
+  const isLoggedIn = async () => {
     try {
       let tokenStorage = getStringFromsaveToMMKVStorage('access_token');
       if (tokenStorage) {
@@ -56,9 +58,14 @@ export const AuthProvider: FC<Props> = ({children}) => {
           exp: number;
         }>(tokenStorage);
 
-        const expirationTime = exp * 1000 - 60000;
-        if (Date.now() > expirationTime) {
+        const expirationTime = exp * 1000;
+        if (Date.now() <= expirationTime) {
           setUserToken(tokenStorage);
+        } else {
+          setUserToken(undefined);
+          deleteKeyFromMMKVStorage('access_token');
+          deleteKeyFromMMKVStorage('refresh_token');
+          await GoogleSignin.signOut();
         }
       }
       setIsLoading(false);
