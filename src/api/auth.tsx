@@ -27,7 +27,6 @@ async function refreshTokenApi(refreshToken: string) {
 
 async function sendGoogleInfoToServer(userInfo: IUser) {
   try {
-    console.log(userInfo);
     const response = await axios.post('/auth/google/login/mobile', {
       ...userInfo,
       password: '1',
