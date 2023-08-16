@@ -13,6 +13,8 @@ import {
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 
+import {BASE_URL} from '@env';
+
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -42,11 +44,8 @@ export function LoginScreen() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      sendGoogleToServerMutation.mutate({
-        email: userInfo.user.email,
-        firstName: userInfo.user.familyName ?? '',
-        lastName: userInfo.user.givenName ?? '',
-      });
+      console.log(userInfo.idToken);
+      sendGoogleToServerMutation.mutate(userInfo.idToken ?? '');
     } catch (error) {
       console.log(error);
     }

@@ -19,13 +19,13 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import store from 'redux/store';
 import {setupAxios} from 'utils/AuthUtils';
+import {GOOGLE_CLIENT_ID} from '@env';
 
 const queryClient = new QueryClient();
 setupAxios(axios);
 
 GoogleSignin.configure({
-  webClientId:
-    '970731309100-59mfsp41tivgd2dcqpsao4emsc82bco1.apps.googleusercontent.com',
+  webClientId: GOOGLE_CLIENT_ID,
   offlineAccess: true,
 });
 
