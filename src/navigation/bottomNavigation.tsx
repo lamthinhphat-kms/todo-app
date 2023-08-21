@@ -11,7 +11,7 @@ function BottomNavTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Zustand"
-      screenOptions={{headerShown: false}}>
+      screenOptions={{headerShown: false, tabBarLabelPosition: 'below-icon'}}>
       <Tab.Screen
         name="Store"
         component={ToDoListStore}

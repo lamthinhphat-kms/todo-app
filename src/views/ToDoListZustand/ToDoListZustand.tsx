@@ -19,12 +19,17 @@ import {v4 as uuid} from 'uuid';
 import Animated, {Layout} from 'react-native-reanimated';
 import {GestureHandlerRootView, FlatList} from 'react-native-gesture-handler';
 import {useRef} from 'react';
+import useOrientation from 'hooks/useOrientation';
+import TaskTileLandScape from './components/TaskTileLandScape';
+import {ITask} from 'models/ITask';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();
   const taskList = zustandStore(store => store.taskList);
   const addTaskZustand = zustandStore(store => store.addTask);
   const showModal = zustandStore(store => store.showModal);
+
+  const orientation = useOrientation();
 
   const onPressAdd = () => {
     Keyboard.dismiss();
@@ -35,6 +40,22 @@ function ToDoListZustand() {
       isCompleted: false,
     });
   };
+
+  const formatData = (data: ITask[]) => {
+    const newList = data.concat();
+    let numberOfElementsLastRow = data.length % 2;
+    while (numberOfElementsLastRow !== 2 && numberOfElementsLastRow !== 0) {
+      newList.push({
+        id: `empty ${numberOfElementsLastRow}`,
+        title: '',
+        isCompleted: false,
+      });
+      numberOfElementsLastRow++;
+    }
+
+    return newList;
+  };
+
   return (
     <View
       style={{
@@ -42,9 +63,17 @@ function ToDoListZustand() {
       }}>
       <View style={{flex: 1}}>
         <Animated.FlatList
+          numColumns={orientation.isPortrait ? 1 : 2}
+          key={orientation.isPortrait ? 'v' : 'h'}
           contentContainerStyle={{flexGrow: 1}}
-          data={taskList}
-          renderItem={({item}) => <TaskTileZustand task={item} />}
+          data={formatData(taskList)}
+          renderItem={({item}) =>
+            orientation.isPortrait ? (
+              <TaskTileZustand task={item} orientation={orientation} />
+            ) : (
+              <TaskTileLandScape task={item} />
+            )
+          }
           keyExtractor={item => item.id}
           itemLayoutAnimation={Layout.springify()}
         />

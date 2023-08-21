@@ -22,9 +22,11 @@ import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
+import {UseOrientationReturnValue} from 'hooks/useOrientation';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
+  orientation: UseOrientationReturnValue;
 }>;
 
 type ContextType = {
@@ -106,12 +108,7 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
   }, []);
 
   return (
-    <Animated.View
-      entering={BounceInLeft}
-      style={{
-        marginHorizontal: 8,
-        justifyContent: 'center',
-      }}>
+    <Animated.View entering={BounceInLeft} style={styles.taskContainer}>
       <Animated.View style={[styles.deleteBtn, rIconDel]}>
         <TouchableOpacity onPress={() => {}}>
           <MaterialIcons
@@ -222,5 +219,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     padding: 12,
+  },
+
+  taskContainer: {
+    marginHorizontal: 8,
+    marginVertical: 4,
+    justifyContent: 'center',
+    flex: 1,
   },
 });
