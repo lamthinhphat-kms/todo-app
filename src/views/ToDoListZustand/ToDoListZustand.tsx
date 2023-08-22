@@ -18,10 +18,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {v4 as uuid} from 'uuid';
 import Animated, {Layout} from 'react-native-reanimated';
 import {GestureHandlerRootView, FlatList} from 'react-native-gesture-handler';
-import {useRef} from 'react';
+import {SetStateAction, useRef} from 'react';
 import useOrientation from 'hooks/useOrientation';
 import TaskTileLandScape from './components/TaskTileLandScape';
 import {ITask} from 'models/ITask';
+import {InputField} from 'components/InputField';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();
@@ -41,7 +42,7 @@ function ToDoListZustand() {
     });
   };
 
-  const formatData = (data: ITask[]) => {
+  const formatData = (data: ITask[]): ITask[] => {
     const newList = data.concat();
     let numberOfElementsLastRow = data.length % 2;
     while (numberOfElementsLastRow !== 2 && numberOfElementsLastRow !== 0) {
@@ -79,12 +80,13 @@ function ToDoListZustand() {
         />
       </View>
       <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="Write a task"
-          value={task}
-          onChangeText={newText => setTask(newText)}
-        />
+        <View style={{flex: 1}}>
+          <InputField
+            placeholder="Write a task"
+            text={task}
+            setText={newText => setTask(newText)}
+          />
+        </View>
         <TouchableOpacity onPress={onPressAdd}>
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>

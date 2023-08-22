@@ -4,13 +4,14 @@ import ToDoListStore from 'views/ToDoListStore/ToDoListStore';
 import ToDoListApi from 'views/ToDoListApi/ToDoListApi';
 import ToDoListZustand from 'views/ToDoListZustand/ToDoListZustand';
 import AccountScreen from 'views/Account/AccountScreen';
+import DraggableToDoList from 'views/DraggableToDoList/DraggableToDoList';
 
 const Tab = createBottomTabNavigator();
 
 function BottomNavTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Zustand"
+      initialRouteName="Dragable"
       screenOptions={{headerShown: false, tabBarLabelPosition: 'below-icon'}}>
       <Tab.Screen
         name="Store"
@@ -36,6 +37,15 @@ function BottomNavTabs() {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <Icon name="hippo" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Dragable"
+        component={DraggableToDoList}
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <Icon name="list-ol" color={color} size={size} />
           ),
         }}
       />

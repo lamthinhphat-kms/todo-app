@@ -20,6 +20,7 @@ import taskListSlice from 'redux/TaskList/taskListSlice';
 import EditModalStore from './components/EditModalStore';
 import useToDoStoreHook from 'hooks/useToDoStoreHook';
 import Animated, {Layout} from 'react-native-reanimated';
+import {InputField} from 'components/InputField';
 
 function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
@@ -59,13 +60,13 @@ function ToDoListStore(): JSX.Element {
         />
       </View>
       <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="Write a task"
-          value={task}
-          onChangeText={newText => setTask(newText)}
-          onSubmitEditing={onPressAdd}
-        />
+        <View style={{flex: 1}}>
+          <InputField
+            placeholder="Write a task"
+            text={task}
+            setText={newText => setTask(newText)}
+          />
+        </View>
         <TouchableOpacity onPress={onPressAdd}>
           <Icon name="pluscircle" size={30} />
         </TouchableOpacity>

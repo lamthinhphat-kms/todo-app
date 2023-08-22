@@ -1,6 +1,5 @@
 import {Button, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {InputField} from './components/InputField';
 import {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from 'navigation/types';
@@ -14,6 +13,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 import {BASE_URL} from '@env';
+import {InputField} from 'components/InputField';
 
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');

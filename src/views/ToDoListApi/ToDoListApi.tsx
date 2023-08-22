@@ -25,6 +25,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import taskService from 'api/tasks';
+import {InputField} from 'components/InputField';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -95,12 +96,13 @@ function ToDoListApi(): JSX.Element {
         )}
       </View>
       <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          placeholder="Write a task"
-          value={task}
-          onChangeText={value => setTask(value)}
-        />
+        <View style={{flex: 1}}>
+          <InputField
+            placeholder="Write a task"
+            text={task}
+            setText={newText => setTask(newText)}
+          />
+        </View>
         <TouchableOpacity onPress={handleSubmit}>
           {createTaskMutation.isLoading ? (
             <ActivityIndicator />
