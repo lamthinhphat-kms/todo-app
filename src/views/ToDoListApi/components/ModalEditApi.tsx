@@ -10,21 +10,30 @@ import {
 } from 'react-native';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import taskService from 'api/tasks';
+import {Socket} from 'socket.io-client';
 
 type ModalEditProps = PropsWithChildren<{
   task: ITask;
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket;
+  userId: number;
 }>;
 export default function ModalEditApi(props: ModalEditProps): JSX.Element {
   const [title, setTitle] = useState<string>('');
+  const {socket, userId} = props;
   const queryClient = useQueryClient();
   const updateTaskMuatation = useMutation({
     mutationFn: taskService.updateTask,
     onSuccess: data => {
-      setTitle(''), Keyboard.dismiss();
-      props.setShowModal(prevShowModal => !prevShowModal);
-      queryClient.invalidateQueries(['tasks'], {exact: true});
+      // queryClient.invalidateQueries(['tasks'], {exact: true});
+      if (socket && userId) {
+        socket.emit('task', {
+          userId,
+        });
+        setTitle(''), Keyboard.dismiss();
+        props.setShowModal(prevShowModal => !prevShowModal);
+      }
     },
   });
 

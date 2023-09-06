@@ -30,6 +30,7 @@ module.exports = {
         views: ["./src/views"],
         zustand: ["./src/zustand"],
         context: ["./src/context"],
+        socket: ["./src/socket"],
       }
     }]
   ]

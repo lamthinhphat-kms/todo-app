@@ -1,4 +1,4 @@
-import {Button, View} from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -52,23 +52,7 @@ export function LoginScreen() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <GoogleSigninButton
-        style={{width: 222, height: 48}}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        disabled={
-          loginMutation.isLoading || sendGoogleToServerMutation.isLoading
-            ? true
-            : false
-        }
-        onPress={signIn}
-      />
+    <View style={styles.container}>
       <InputField placeholder="Email" text={email} setText={setEmail} />
       <InputField
         placeholder="Password"
@@ -93,6 +77,25 @@ export function LoginScreen() {
           });
         }}
       />
+      <GoogleSigninButton
+        style={{width: 222, height: 48}}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        disabled={
+          loginMutation.isLoading || sendGoogleToServerMutation.isLoading
+            ? true
+            : false
+        }
+        onPress={signIn}
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

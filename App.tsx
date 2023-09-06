@@ -13,7 +13,7 @@ import {AuthProvider} from 'context/AuthContext';
 import {AuthStack} from 'navigation/AuthNavigation';
 import {RootStack} from 'navigation/RootNavigation';
 import BottomNavTabs from 'navigation/bottomNavigation';
-import {StyleSheet} from 'react-native';
+import {LogBox, StyleSheet} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
@@ -30,6 +30,8 @@ GoogleSignin.configure({
 });
 
 function App(): JSX.Element {
+  LogBox.ignoreLogs(['new NativeEventEmitter()']);
+
   return (
     <GestureHandlerRootView
       style={{

@@ -14,7 +14,8 @@
         "utils": ["./src/utils"],
         "views": ["./src/views"],
         "zustand": ["./src/zustand"],
-        "context": ["./src/context"]
+        "context": ["./src/context"],
+        "socket": ["./src/socket"]
     },
   }
 }

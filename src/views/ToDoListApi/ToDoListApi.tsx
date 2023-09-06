@@ -26,6 +26,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import taskService from 'api/tasks';
 import {InputField} from 'components/InputField';
+import {useContext, useEffect} from 'react';
+import {AuthContext} from 'context/AuthContext';
+import jwtDecode from 'jwt-decode';
+import {socket} from 'socket/socket';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -36,27 +40,61 @@ function ToDoListApi(): JSX.Element {
     taskModel,
     setTaskModel,
     onViewCallBack,
+    taskList,
+    setTaskList,
     sharedViewAbleItems,
   } = useToDoApiHook();
+
+  const {userToken} = useContext(AuthContext);
+  const {sub} = jwtDecode<{
+    sub: number;
+  }>(userToken ?? '');
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      socket.emit('listen', {
+        sub,
+        socketId: socket.id,
+      });
+    });
+
+    socket.on('task', e => {
+      setTaskList([...e]);
+    });
+
+    socket.connect();
+
+    return () => {
+      socket.off('connect');
+      socket.off('listen');
+      socket.off('task');
+      socket.off('disconnect');
+      socket.disconnect();
+    };
+  }, []);
 
   const queryClient = useQueryClient();
 
   const taskQuery = useQuery({
     queryKey: ['tasks'],
     queryFn: taskService.getTasks,
+    onSuccess: data => {
+      setTaskList(data);
+    },
   });
   useRefetchOnFocus(taskQuery.refetch);
-
-  // const taskQuery = useReactNavigationQuery(['tasks'], getTasks, {
-  //   refetchOnWindowFocus: true,
-  // });
 
   const createTaskMutation = useMutation({
     mutationFn: taskService.createTask,
     onSuccess: data => {
-      queryClient.invalidateQueries(['tasks'], {exact: true});
-      Keyboard.dismiss();
-      setTask('');
+      if (socket && userToken) {
+        socket.emit('task', {
+          userId: sub,
+        });
+        Keyboard.dismiss();
+        setTask('');
+      }
+      // queryClient.invalidateQueries(['tasks'], {exact: true});
     },
   });
 
@@ -73,13 +111,15 @@ function ToDoListApi(): JSX.Element {
         task={taskModel}
         showModal={showModal}
         setShowModal={setShowModal}
+        socket={socket}
+        userId={sub}
       />
       <View style={{...styles.listTask, flex: 1}}>
         {taskQuery.isLoading ? (
           <ActivityIndicator />
         ) : (
           <Animated.FlatList
-            data={taskQuery.data}
+            data={taskList}
             onViewableItemsChanged={onViewCallBack}
             renderItem={({item}) => (
               <TaskTileApi
@@ -87,6 +127,8 @@ function ToDoListApi(): JSX.Element {
                 setShowModal={setShowModal}
                 setTaskModel={setTaskModel}
                 sharedViewAbleItems={sharedViewAbleItems}
+                socket={socket}
+                userId={sub}
               />
             )}
             keyExtractor={item => item.id}

@@ -18,29 +18,42 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import taskService from 'api/tasks';
+import {Socket} from 'socket.io-client';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setTaskModel: React.Dispatch<React.SetStateAction<ITask>>;
   sharedViewAbleItems: Animated.SharedValue<ViewToken[]>;
+  socket: Socket;
+  userId: number;
 }>;
 
 function TaskTileApi(props: TaskTileProps) {
-  const {task} = props;
+  const {task, socket, userId} = props;
   const queryClient = useQueryClient();
   const animationValue = useSharedValue<number>(0);
   const updateTaskMuatation = useMutation({
     mutationFn: taskService.updateTask,
     onSuccess: data => {
-      queryClient.invalidateQueries(['tasks'], {exact: true});
+      // queryClient.invalidateQueries(['tasks'], {exact: true});
+      if (socket && userId) {
+        socket.emit('task', {
+          userId,
+        });
+      }
     },
   });
 
   const deleteTaskMuatation = useMutation({
     mutationFn: taskService.deleteTask,
     onSuccess: data => {
-      queryClient.invalidateQueries(['tasks'], {exact: true});
+      // queryClient.invalidateQueries(['tasks'], {exact: true});
+      if (socket && userId) {
+        socket.emit('task', {
+          userId,
+        });
+      }
     },
   });
   const rStyle = useAnimatedStyle(() => {

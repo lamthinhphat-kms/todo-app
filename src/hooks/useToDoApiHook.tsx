@@ -12,6 +12,8 @@ interface ToDoApiHookReturnValue {
   setTaskString: React.Dispatch<React.SetStateAction<string>>;
   taskModel: ITask;
   setTaskModel: React.Dispatch<React.SetStateAction<ITask>>;
+  taskList: ITask[];
+  setTaskList: React.Dispatch<React.SetStateAction<ITask[]>>;
   onViewCallBack: ({
     viewableItems,
     changed,
@@ -26,6 +28,7 @@ const useToDoApiHook = (): ToDoApiHookReturnValue => {
   const [task, setTask] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [taskString, setTaskString] = useState<string>('');
+  const [taskList, setTaskList] = useState<ITask[]>([]);
   const [taskModel, setTaskModel] = useState<ITask>({
     id: '',
     title: '',
@@ -56,6 +59,8 @@ const useToDoApiHook = (): ToDoApiHookReturnValue => {
     taskModel,
     setTaskModel,
     onViewCallBack,
+    taskList,
+    setTaskList,
     sharedViewAbleItems,
   };
 };
