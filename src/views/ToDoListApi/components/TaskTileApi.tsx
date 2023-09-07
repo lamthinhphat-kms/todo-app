@@ -10,6 +10,7 @@ import {
 import {ITask} from 'models/ITask';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {format} from 'date-fns';
 import Animated, {
   FadeOut,
   ZoomOut,
@@ -19,6 +20,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import taskService from 'api/tasks';
 import {Socket} from 'socket.io-client';
+import {removeNotiById} from 'utils/NotificationAndroid';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;
@@ -37,6 +39,9 @@ function TaskTileApi(props: TaskTileProps) {
     mutationFn: taskService.updateTask,
     onSuccess: data => {
       // queryClient.invalidateQueries(['tasks'], {exact: true});
+      if (data.isCompleted) {
+        removeNotiById(data);
+      }
       if (socket && userId) {
         socket.emit('task', {
           userId,
@@ -49,6 +54,7 @@ function TaskTileApi(props: TaskTileProps) {
     mutationFn: taskService.deleteTask,
     onSuccess: data => {
       // queryClient.invalidateQueries(['tasks'], {exact: true});
+      removeNotiById(props.task);
       if (socket && userId) {
         socket.emit('task', {
           userId,
@@ -84,65 +90,80 @@ function TaskTileApi(props: TaskTileProps) {
       </Text>
       <View
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
         }}>
-        {!task.isCompleted && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          {!task.isCompleted && (
+            <TouchableOpacity
+              onPress={() => {
+                props.setTaskModel(task);
+                props.setShowModal(prevShowModal => !prevShowModal);
+              }}>
+              <MaterialIcons
+                name="edit"
+                style={{backgroundColor: 'grey', padding: 4, borderRadius: 4}}
+                color={'white'}
+                size={20}
+              />
+            </TouchableOpacity>
+          )}
+          <View style={{width: 8}} />
+          {!task.isCompleted && (
+            <TouchableOpacity
+              disabled={updateTaskMuatation.isLoading}
+              onPress={() => {
+                updateTaskMuatation.mutate({
+                  id: task.id,
+                  title: task.title,
+                  isCompleted: !task.isCompleted,
+                });
+              }}>
+              {updateTaskMuatation.isLoading ? (
+                <ActivityIndicator size={25} />
+              ) : (
+                <MaterialIcons
+                  name="done"
+                  style={{
+                    backgroundColor: 'green',
+                    padding: 4,
+                    borderRadius: 4,
+                  }}
+                  color={'white'}
+                  size={20}
+                />
+              )}
+            </TouchableOpacity>
+          )}
+          <View style={{width: 8}} />
           <TouchableOpacity
+            disabled={deleteTaskMuatation.isLoading}
             onPress={() => {
-              props.setTaskModel(task);
-              props.setShowModal(prevShowModal => !prevShowModal);
-            }}>
-            <MaterialIcons
-              name="edit"
-              style={{backgroundColor: 'grey', padding: 4, borderRadius: 4}}
-              color={'white'}
-              size={20}
-            />
-          </TouchableOpacity>
-        )}
-        <View style={{width: 8}} />
-        {!task.isCompleted && (
-          <TouchableOpacity
-            disabled={updateTaskMuatation.isLoading}
-            onPress={() => {
-              updateTaskMuatation.mutate({
+              deleteTaskMuatation.mutate({
                 id: task.id,
-                title: task.title,
-                isCompleted: !task.isCompleted,
               });
             }}>
-            {updateTaskMuatation.isLoading ? (
+            {deleteTaskMuatation.isLoading ? (
               <ActivityIndicator size={25} />
             ) : (
               <MaterialIcons
-                name="done"
-                style={{backgroundColor: 'green', padding: 4, borderRadius: 4}}
+                name="delete"
+                style={{backgroundColor: 'red', padding: 4, borderRadius: 4}}
                 color={'white'}
                 size={20}
               />
             )}
           </TouchableOpacity>
-        )}
-        <View style={{width: 8}} />
-        <TouchableOpacity
-          disabled={deleteTaskMuatation.isLoading}
-          onPress={() => {
-            deleteTaskMuatation.mutate({
-              id: task.id,
-            });
-          }}>
-          {deleteTaskMuatation.isLoading ? (
-            <ActivityIndicator size={25} />
-          ) : (
-            <MaterialIcons
-              name="delete"
-              style={{backgroundColor: 'red', padding: 4, borderRadius: 4}}
-              color={'white'}
-              size={20}
-            />
-          )}
-        </TouchableOpacity>
+        </View>
+        <Text>
+          {props.task.deadline
+            ? `End in ${format(Date.parse(props.task.deadline), 'dd/MM/yyyy')}`
+            : ''}
+        </Text>
       </View>
     </Animated.View>
   );

@@ -30,6 +30,12 @@ import {useContext, useEffect} from 'react';
 import {AuthContext} from 'context/AuthContext';
 import jwtDecode from 'jwt-decode';
 import {socket} from 'socket/socket';
+import {
+  handleListScheduleNoti,
+  handleScheduleNotification,
+  logScheduledTask,
+  removeAllNoti,
+} from 'utils/NotificationAndroid';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -59,6 +65,7 @@ function ToDoListApi(): JSX.Element {
     });
 
     socket.on('task', e => {
+      handleListScheduleNoti(e);
       setTaskList([...e]);
     });
 
@@ -79,6 +86,7 @@ function ToDoListApi(): JSX.Element {
     queryKey: ['tasks'],
     queryFn: taskService.getTasks,
     onSuccess: data => {
+      handleListScheduleNoti(data);
       setTaskList(data);
     },
   });
@@ -91,6 +99,7 @@ function ToDoListApi(): JSX.Element {
         socket.emit('task', {
           userId: sub,
         });
+        handleScheduleNotification(data);
         Keyboard.dismiss();
         setTask('');
       }
@@ -151,6 +160,13 @@ function ToDoListApi(): JSX.Element {
           ) : (
             <Icon name="pluscircle" size={30} />
           )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            logScheduledTask();
+          }}>
+          <Icon name="bars" size={30} />
         </TouchableOpacity>
       </View>
     </View>

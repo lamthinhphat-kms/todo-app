@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 function BottomNavTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Dragable"
+      initialRouteName="API"
       screenOptions={{headerShown: false, tabBarLabelPosition: 'below-icon'}}>
       <Tab.Screen
         name="Store"

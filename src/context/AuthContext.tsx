@@ -7,6 +7,7 @@ import {
   getStringFromsaveToMMKVStorage,
   saveToMMKVStorage,
 } from 'utils/MMKVStorage';
+import {removeAllNoti} from 'utils/NotificationAndroid';
 
 interface AuthContextProps {
   userToken: string | undefined;
@@ -47,6 +48,7 @@ export const AuthProvider: FC<Props> = ({children}) => {
     deleteKeyFromMMKVStorage('access_token');
     deleteKeyFromMMKVStorage('refresh_token');
     await GoogleSignin.signOut();
+    removeAllNoti();
     setIsLoading(false);
   };
 
@@ -65,12 +67,18 @@ export const AuthProvider: FC<Props> = ({children}) => {
           setUserToken(undefined);
           deleteKeyFromMMKVStorage('access_token');
           deleteKeyFromMMKVStorage('refresh_token');
+          removeAllNoti();
           await GoogleSignin.signOut();
         }
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      setUserToken(undefined);
+      deleteKeyFromMMKVStorage('access_token');
+      deleteKeyFromMMKVStorage('refresh_token');
+      removeAllNoti();
+      await GoogleSignin.signOut();
     }
   };
 
