@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">firstproject</string>
+    <string name="default_notification_channel_id">phat_lam</string>
 </resources>

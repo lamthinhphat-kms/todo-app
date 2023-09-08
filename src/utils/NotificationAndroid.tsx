@@ -15,6 +15,7 @@ const handleScheduleNotification = (task: ITask) => {
         date.setDate(date.getDate() - 1);
         date.setHours(0, 0, 0, 0);
         PushNotification.localNotificationSchedule({
+          channelId: 'phat_lam',
           id: task.id,
           title: 'Task near expired',
           message: task.title,
@@ -55,10 +56,22 @@ const logScheduledTask = () => {
   });
 };
 
+const showNoti = () => {
+  PushNotification.getChannels(channelId => {
+    channelId.forEach(id => console.log(id));
+  });
+  PushNotification.localNotification({
+    channelId: 'phat_lam',
+    title: '123',
+    message: '123',
+  });
+};
+
 export {
   handleScheduleNotification,
   handleListScheduleNoti,
   removeAllNoti,
   removeNotiById,
   logScheduledTask,
+  showNoti,
 };

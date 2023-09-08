@@ -13,13 +13,15 @@ import {AuthProvider} from 'context/AuthContext';
 import {AuthStack} from 'navigation/AuthNavigation';
 import {RootStack} from 'navigation/RootNavigation';
 import BottomNavTabs from 'navigation/bottomNavigation';
-import {LogBox, StyleSheet} from 'react-native';
+import {LogBox, Platform, StyleSheet} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {Provider} from 'react-redux';
 import store from 'redux/store';
 import {setupAxios} from 'utils/AuthUtils';
 import {GOOGLE_CLIENT_ID} from '@env';
+import {useEffect} from 'react';
+import {request, PERMISSIONS, check, RESULTS} from 'react-native-permissions';
 
 const queryClient = new QueryClient();
 setupAxios(axios);
@@ -31,6 +33,15 @@ GoogleSignin.configure({
 
 function App(): JSX.Element {
   LogBox.ignoreLogs(['new NativeEventEmitter()']);
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      check(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then(result => {
+        if (result !== RESULTS.GRANTED) {
+          request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+        }
+      });
+    }
+  }, []);
 
   return (
     <GestureHandlerRootView
