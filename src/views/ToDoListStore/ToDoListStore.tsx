@@ -21,11 +21,14 @@ import EditModalStore from './components/EditModalStore';
 import useToDoStoreHook from 'hooks/useToDoStoreHook';
 import Animated, {Layout} from 'react-native-reanimated';
 import {InputField} from 'components/InputField';
+import {ThemeContext} from 'context/ThemeContext';
+import {useContext} from 'react';
 
 function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
   const taskList = useSelector(taskListSelector);
   const {task, setTask, viewAbleItems, onViewCallBack} = useToDoStoreHook();
+  const {isDarkMode} = useContext(ThemeContext);
 
   const onPressAdd = () => {
     Keyboard.dismiss();
@@ -45,6 +48,7 @@ function ToDoListStore(): JSX.Element {
     <View
       style={{
         flex: 1,
+        backgroundColor: isDarkMode ? 'gainsboro' : 'white',
       }}>
       <EditModalStore />
       <View style={styles.listTask}>

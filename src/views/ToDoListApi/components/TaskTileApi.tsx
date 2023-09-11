@@ -1,4 +1,4 @@
-import {PropsWithChildren, memo, useEffect} from 'react';
+import {PropsWithChildren, memo, useContext, useEffect} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -21,6 +21,7 @@ import Animated, {
 import taskService from 'api/tasks';
 import {Socket} from 'socket.io-client';
 import {removeNotiById} from 'utils/NotificationAndroid';
+import {ThemeContext} from 'context/ThemeContext';
 
 type TaskTileProps = PropsWithChildren<{
   task: ITask;
@@ -35,6 +36,7 @@ function TaskTileApi(props: TaskTileProps) {
   const {task, socket, userId} = props;
   const queryClient = useQueryClient();
   const animationValue = useSharedValue<number>(0);
+  const {isDarkMode} = useContext(ThemeContext);
   const updateTaskMuatation = useMutation({
     mutationFn: taskService.updateTask,
     onSuccess: data => {
@@ -80,7 +82,14 @@ function TaskTileApi(props: TaskTileProps) {
     };
   }, []);
   return (
-    <Animated.View style={[styles.task, rStyle]}>
+    <Animated.View
+      style={[
+        styles.task,
+        rStyle,
+        {
+          backgroundColor: isDarkMode ? 'gainsboro' : 'white',
+        },
+      ]}>
       <Text
         style={{
           ...styles.text,

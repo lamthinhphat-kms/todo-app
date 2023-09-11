@@ -9,17 +9,19 @@ const handleScheduleNotification = (task: ITask) => {
         !notifications.some(function (noti) {
           return noti.id === task.id;
         }) &&
-        !task.isCompleted
+        !task.isCompleted &&
+        new Date(task.deadline!) > new Date()
       ) {
         const date = new Date(task.deadline!);
-        date.setDate(date.getDate() - 1);
+        date.setDate(date.getDate());
         date.setHours(0, 0, 0, 0);
         PushNotification.localNotificationSchedule({
           channelId: 'phat_lam',
           id: task.id,
-          title: 'Task near expired',
+          title: 'Task expire today',
           message: task.title,
           date: date,
+          // date: new Date(Date.now() + 5 * 1000),
         });
       } else {
         if (task.isCompleted) {

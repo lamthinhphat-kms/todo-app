@@ -5,7 +5,10 @@ const MMKVStorage = new MMKV({
   encryptionKey: 'token-secret',
 });
 
-export const saveToMMKVStorage = (key: string, value: string) => {
+export const saveToMMKVStorage = (
+  key: string,
+  value: string | number | boolean,
+) => {
   MMKVStorage.set(key, value);
 };
 

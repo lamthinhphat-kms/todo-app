@@ -1,4 +1,5 @@
-import {PropsWithChildren} from 'react';
+import {ThemeContext} from 'context/ThemeContext';
+import {PropsWithChildren, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 
@@ -9,13 +10,18 @@ type InputProp = PropsWithChildren<{
 }>;
 
 export function InputField(props: InputProp) {
+  const {isDarkMode} = useContext(ThemeContext);
+
   return (
     <View style={styles.inputRow}>
       <TextInput
         placeholder={props.placeholder}
         value={props.text}
         onChangeText={newText => props.setText(newText)}
-        style={styles.inputField}
+        style={{
+          ...styles.inputField,
+          backgroundColor: isDarkMode ? 'darkgray' : undefined,
+        }}
       />
     </View>
   );

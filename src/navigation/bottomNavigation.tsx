@@ -5,14 +5,25 @@ import ToDoListApi from 'views/ToDoListApi/ToDoListApi';
 import ToDoListZustand from 'views/ToDoListZustand/ToDoListZustand';
 import AccountScreen from 'views/Account/AccountScreen';
 import DraggableToDoList from 'views/DraggableToDoList/DraggableToDoList';
+import {useContext} from 'react';
+import {ThemeContext} from 'context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 
 function BottomNavTabs() {
+  const {isDarkMode} = useContext(ThemeContext);
   return (
     <Tab.Navigator
-      initialRouteName="API"
-      screenOptions={{headerShown: false, tabBarLabelPosition: 'below-icon'}}>
+      initialRouteName="Account"
+      screenOptions={{
+        headerShown: false,
+        tabBarLabelPosition: 'below-icon',
+        tabBarActiveTintColor: isDarkMode ? 'gray' : undefined,
+        tabBarInactiveTintColor: isDarkMode ? 'darkgray' : undefined,
+        tabBarStyle: {
+          backgroundColor: isDarkMode ? 'gainsboro' : 'white',
+        },
+      }}>
       <Tab.Screen
         name="Store"
         component={ToDoListStore}

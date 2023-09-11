@@ -1,5 +1,5 @@
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {InputField} from 'components/InputField';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
@@ -10,11 +10,13 @@ import {ITask} from 'models/ITask';
 import {v4 as uuid} from 'uuid';
 import DraggableItem from './components/DraggableItem';
 import Voice from '@react-native-voice/voice';
+import {ThemeContext} from 'context/ThemeContext';
 
 const DraggableToDoList = () => {
   const [text, setText] = useState<string>('');
   const [taskList, setTaskList] = useState<ITask[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const {isDarkMode} = useContext(ThemeContext);
 
   useEffect(() => {
     Voice.onSpeechStart = () => setIsRecording(true);
@@ -55,7 +57,11 @@ const DraggableToDoList = () => {
   };
 
   return (
-    <View style={styles.flex}>
+    <View
+      style={{
+        ...styles.flex,
+        backgroundColor: isDarkMode ? 'gainsboro' : 'white',
+      }}>
       <View style={styles.flex}>
         <NestableScrollContainer>
           <NestableDraggableFlatList
@@ -66,7 +72,10 @@ const DraggableToDoList = () => {
           />
         </NestableScrollContainer>
       </View>
-      <View style={styles.inputContainer}>
+      <View
+        style={{
+          ...styles.inputContainer,
+        }}>
         <View style={{flex: 1}}>
           <InputField
             placeholder="Write a task"
@@ -95,7 +104,11 @@ const DraggableToDoList = () => {
             ]);
             setText('');
           }}>
-          <Icon name="pluscircle" size={30} />
+          <Icon
+            name="pluscircle"
+            size={30}
+            color={isDarkMode ? 'gray' : undefined}
+          />
         </TouchableOpacity>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import {PropsWithChildren, useState} from 'react';
+import {PropsWithChildren, useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import useToDoStoreHook from 'hooks/useToDoStoreHook';
+import {ThemeContext} from 'context/ThemeContext';
 
 type TaskProp = PropsWithChildren<{
   task: ITask;
@@ -31,6 +32,7 @@ export default function TaskTileStore(prop: TaskProp): JSX.Element {
   const {task, viewAbleItems} = prop;
   const dispatch = useDispatch();
   const animationValue = useSharedValue<number>(-width);
+  const {isDarkMode} = useContext(ThemeContext);
 
   const rStyle = useAnimatedStyle(() => {
     animationValue.value = handleVisible(viewAbleItems, task);
@@ -44,7 +46,15 @@ export default function TaskTileStore(prop: TaskProp): JSX.Element {
   }, []);
 
   return (
-    <Animated.View exiting={exiting} style={[styles.task, rStyle]}>
+    <Animated.View
+      exiting={exiting}
+      style={[
+        styles.task,
+        rStyle,
+        {
+          backgroundColor: isDarkMode ? 'gainsboro' : 'white',
+        },
+      ]}>
       <Text
         style={{
           ...styles.text,

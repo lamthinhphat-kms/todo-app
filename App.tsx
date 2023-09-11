@@ -22,6 +22,7 @@ import {setupAxios} from 'utils/AuthUtils';
 import {GOOGLE_CLIENT_ID} from '@env';
 import {useEffect} from 'react';
 import {request, PERMISSIONS, check, RESULTS} from 'react-native-permissions';
+import {ThemeProvider} from 'context/ThemeContext';
 
 const queryClient = new QueryClient();
 setupAxios(axios);
@@ -48,17 +49,19 @@ function App(): JSX.Element {
       style={{
         flex: 1,
       }}>
-      <AuthProvider>
-        <SafeAreaProvider>
-          <QueryClientProvider client={queryClient}>
-            <Provider store={store}>
-              <SafeAreaView style={{flex: 1}}>
-                <RootStack />
-              </SafeAreaView>
-            </Provider>
-          </QueryClientProvider>
-        </SafeAreaProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <SafeAreaProvider>
+            <QueryClientProvider client={queryClient}>
+              <Provider store={store}>
+                <SafeAreaView style={{flex: 1}}>
+                  <RootStack />
+                </SafeAreaView>
+              </Provider>
+            </QueryClientProvider>
+          </SafeAreaProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </GestureHandlerRootView>
   );
 }

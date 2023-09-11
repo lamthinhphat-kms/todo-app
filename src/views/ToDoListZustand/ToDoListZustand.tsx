@@ -18,17 +18,19 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {v4 as uuid} from 'uuid';
 import Animated, {Layout} from 'react-native-reanimated';
 import {GestureHandlerRootView, FlatList} from 'react-native-gesture-handler';
-import {SetStateAction, useRef} from 'react';
+import {SetStateAction, useContext, useRef} from 'react';
 import useOrientation from 'hooks/useOrientation';
 import TaskTileLandScape from './components/TaskTileLandScape';
 import {ITask} from 'models/ITask';
 import {InputField} from 'components/InputField';
+import {ThemeContext} from 'context/ThemeContext';
 
 function ToDoListZustand() {
   const {task, setTask} = useToDoListZustandHook();
   const taskList = zustandStore(store => store.taskList);
   const addTaskZustand = zustandStore(store => store.addTask);
   const showModal = zustandStore(store => store.showModal);
+  const {isDarkMode} = useContext(ThemeContext);
 
   const orientation = useOrientation();
 
@@ -61,6 +63,7 @@ function ToDoListZustand() {
     <View
       style={{
         flex: 1,
+        backgroundColor: isDarkMode ? 'gainsboro' : 'white',
       }}>
       <View style={{flex: 1}}>
         <Animated.FlatList

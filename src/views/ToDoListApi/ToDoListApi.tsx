@@ -37,6 +37,7 @@ import {
   removeAllNoti,
   showNoti,
 } from 'utils/NotificationAndroid';
+import {ThemeContext} from 'context/ThemeContext';
 
 function ToDoListApi(): JSX.Element {
   const {
@@ -56,6 +57,7 @@ function ToDoListApi(): JSX.Element {
   const {sub} = jwtDecode<{
     sub: number;
   }>(userToken ?? '');
+  const {isDarkMode} = useContext(ThemeContext);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -116,7 +118,8 @@ function ToDoListApi(): JSX.Element {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View
+      style={{flex: 1, backgroundColor: isDarkMode ? 'gainsboro' : 'white'}}>
       <ModalEditApi
         task={taskModel}
         showModal={showModal}
