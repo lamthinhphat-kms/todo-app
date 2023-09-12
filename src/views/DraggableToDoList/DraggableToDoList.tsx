@@ -1,6 +1,6 @@
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {InputField} from 'components/InputField';
+import {View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import InputField from 'components/InputField';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   NestableDraggableFlatList,
@@ -38,23 +38,23 @@ const DraggableToDoList = () => {
     };
   }, []);
 
-  const onStartRecording = async () => {
+  const onStartRecording = useCallback(async () => {
     try {
       console.log('start');
       await Voice.start('en-US');
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
-  const onStopRecoding = async () => {
+  const onStopRecoding = useCallback(async () => {
     try {
       console.log('stop');
       await Voice.stop();
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   return (
     <View
@@ -103,6 +103,7 @@ const DraggableToDoList = () => {
               },
             ]);
             setText('');
+            Keyboard.dismiss();
           }}>
           <Icon
             name="pluscircle"

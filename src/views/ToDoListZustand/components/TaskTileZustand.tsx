@@ -1,4 +1,4 @@
-import {PropsWithChildren} from 'react';
+import {PropsWithChildren, memo} from 'react';
 import {ITask} from 'models/ITask';
 import {
   Dimensions,
@@ -35,7 +35,7 @@ type ContextType = {
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 
-export default function TaskTileZustand(prop: TaskProp): JSX.Element {
+export default memo(function TaskTileZustand(prop: TaskProp): JSX.Element {
   const {task} = prop;
   const deleteTask = zustandStore(store => store.removeTask);
   const updateTask = zustandStore(store => store.updateTask);
@@ -106,6 +106,10 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
       opacity: opacityDoneValue.value,
     };
   }, []);
+
+  if (task.id.includes('empty')) {
+    return <></>;
+  }
 
   return (
     <Animated.View entering={BounceInLeft} style={styles.taskContainer}>
@@ -179,7 +183,7 @@ export default function TaskTileZustand(prop: TaskProp): JSX.Element {
       </PanGestureHandler>
     </Animated.View>
   );
-}
+});
 const styles = StyleSheet.create({
   flex: {
     flex: 1,

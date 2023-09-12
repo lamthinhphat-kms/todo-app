@@ -1,5 +1,5 @@
 import {ITask} from 'models/ITask';
-import {PropsWithChildren} from 'react';
+import {PropsWithChildren, memo} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {zustandStore} from 'zustand/store';
@@ -95,7 +95,7 @@ function TaskTileLandScape(props: TaskTileLandScapeProp) {
   );
 }
 
-export default TaskTileLandScape;
+export default memo(TaskTileLandScape);
 
 const styles = StyleSheet.create({
   flex: {

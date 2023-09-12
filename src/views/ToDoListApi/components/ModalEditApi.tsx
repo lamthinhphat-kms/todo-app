@@ -1,4 +1,4 @@
-import {PropsWithChildren, useEffect, useState} from 'react';
+import {PropsWithChildren, memo, useEffect, useState} from 'react';
 import {ITask} from 'models/ITask';
 import {
   ActivityIndicator,
@@ -19,7 +19,7 @@ type ModalEditProps = PropsWithChildren<{
   socket: Socket;
   userId: number;
 }>;
-export default function ModalEditApi(props: ModalEditProps): JSX.Element {
+export default memo(function ModalEditApi(props: ModalEditProps): JSX.Element {
   const [title, setTitle] = useState<string>('');
   const {socket, userId} = props;
   const queryClient = useQueryClient();
@@ -97,4 +97,4 @@ export default function ModalEditApi(props: ModalEditProps): JSX.Element {
       </View>
     </Modal>
   );
-}
+});

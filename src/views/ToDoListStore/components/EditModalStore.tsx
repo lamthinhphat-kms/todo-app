@@ -1,4 +1,4 @@
-import {PropsWithChildren, useEffect, useState} from 'react';
+import {PropsWithChildren, memo, useEffect, useState} from 'react';
 import {Button, Modal, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import modalSlice from 'redux/Modal/modalSlice';
@@ -7,7 +7,7 @@ import {showModalSelector, modalTaskSelector} from 'redux/selectors';
 
 type EditTaskProp = PropsWithChildren<{}>;
 
-export default function EditModalStore(props: EditTaskProp): JSX.Element {
+export default memo(function EditModalStore(props: EditTaskProp): JSX.Element {
   const showModal = useSelector(showModalSelector);
   const modalTask = useSelector(modalTaskSelector);
   const [title, setTitle] = useState<string>('');
@@ -50,7 +50,7 @@ export default function EditModalStore(props: EditTaskProp): JSX.Element {
       </View>
     </Modal>
   );
-}
+});
 
 const styles = StyleSheet.create({
   background: {

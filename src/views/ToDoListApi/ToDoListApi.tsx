@@ -25,8 +25,8 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import taskService from 'api/tasks';
-import {InputField} from 'components/InputField';
-import {useContext, useEffect} from 'react';
+import InputField from 'components/InputField';
+import {useCallback, useContext, useEffect} from 'react';
 import {AuthContext} from 'context/AuthContext';
 import jwtDecode from 'jwt-decode';
 import {socket} from 'socket/socket';
@@ -110,12 +110,12 @@ function ToDoListApi(): JSX.Element {
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     createTaskMutation.mutate({
       title: task,
       isCompleted: false,
     });
-  };
+  }, [task]);
 
   return (
     <View

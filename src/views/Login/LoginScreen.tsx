@@ -13,7 +13,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 import {BASE_URL} from '@env';
-import {InputField} from 'components/InputField';
+import InputField from 'components/InputField';
 
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');

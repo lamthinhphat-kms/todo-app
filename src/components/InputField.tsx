@@ -1,5 +1,5 @@
 import {ThemeContext} from 'context/ThemeContext';
-import {PropsWithChildren, useContext} from 'react';
+import {PropsWithChildren, memo, useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 
@@ -9,9 +9,8 @@ type InputProp = PropsWithChildren<{
   setText: React.Dispatch<React.SetStateAction<string>>;
 }>;
 
-export function InputField(props: InputProp) {
+function InputField(props: InputProp) {
   const {isDarkMode} = useContext(ThemeContext);
-
   return (
     <View style={styles.inputRow}>
       <TextInput
@@ -42,3 +41,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
 });
+export default memo(InputField);

@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, memo} from 'react';
 import {
   RenderItemParams,
   ScaleDecorator,

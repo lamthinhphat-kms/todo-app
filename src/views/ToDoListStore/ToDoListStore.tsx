@@ -20,9 +20,9 @@ import taskListSlice from 'redux/TaskList/taskListSlice';
 import EditModalStore from './components/EditModalStore';
 import useToDoStoreHook from 'hooks/useToDoStoreHook';
 import Animated, {Layout} from 'react-native-reanimated';
-import {InputField} from 'components/InputField';
+import InputField from 'components/InputField';
 import {ThemeContext} from 'context/ThemeContext';
-import {useContext} from 'react';
+import {useCallback, useContext} from 'react';
 
 function ToDoListStore(): JSX.Element {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ function ToDoListStore(): JSX.Element {
   const {task, setTask, viewAbleItems, onViewCallBack} = useToDoStoreHook();
   const {isDarkMode} = useContext(ThemeContext);
 
-  const onPressAdd = () => {
+  const onPressAdd = useCallback(() => {
     Keyboard.dismiss();
     setTask('');
     dispatch(
@@ -42,7 +42,7 @@ function ToDoListStore(): JSX.Element {
         },
       }),
     );
-  };
+  }, [task]);
 
   return (
     <View
@@ -68,7 +68,7 @@ function ToDoListStore(): JSX.Element {
           <InputField
             placeholder="Write a task"
             text={task}
-            setText={newText => setTask(newText)}
+            setText={setTask}
           />
         </View>
         <TouchableOpacity onPress={onPressAdd}>

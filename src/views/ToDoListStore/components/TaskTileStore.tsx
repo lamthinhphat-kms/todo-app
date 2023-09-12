@@ -1,4 +1,4 @@
-import {PropsWithChildren, useContext, useState} from 'react';
+import {PropsWithChildren, memo, useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,7 @@ type TaskProp = PropsWithChildren<{
 
 const {width, height} = Dimensions.get('window');
 
-export default function TaskTileStore(prop: TaskProp): JSX.Element {
+export default memo(function TaskTileStore(prop: TaskProp): JSX.Element {
   const {task, viewAbleItems} = prop;
   const dispatch = useDispatch();
   const animationValue = useSharedValue<number>(-width);
@@ -106,7 +106,7 @@ export default function TaskTileStore(prop: TaskProp): JSX.Element {
       </View>
     </Animated.View>
   );
-}
+});
 
 const handleVisible = (
   viewAbleItems: Animated.SharedValue<ViewToken[]>,

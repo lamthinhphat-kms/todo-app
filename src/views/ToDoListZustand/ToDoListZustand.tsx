@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {zustandStore} from 'zustand/store';
-import {EditModalZustand} from './components/EditModalZustand';
+import EditModalZustand from './components/EditModalZustand';
 import TaskTileZustand from './components/TaskTileZustand';
 
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -18,11 +18,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {v4 as uuid} from 'uuid';
 import Animated, {Layout} from 'react-native-reanimated';
 import {GestureHandlerRootView, FlatList} from 'react-native-gesture-handler';
-import {SetStateAction, useContext, useRef} from 'react';
+import {SetStateAction, useCallback, useContext, useMemo, useRef} from 'react';
 import useOrientation from 'hooks/useOrientation';
 import TaskTileLandScape from './components/TaskTileLandScape';
 import {ITask} from 'models/ITask';
-import {InputField} from 'components/InputField';
+import InputField from 'components/InputField';
 import {ThemeContext} from 'context/ThemeContext';
 
 function ToDoListZustand() {
@@ -34,7 +34,7 @@ function ToDoListZustand() {
 
   const orientation = useOrientation();
 
-  const onPressAdd = () => {
+  const onPressAdd = useCallback(() => {
     Keyboard.dismiss();
     setTask('');
     addTaskZustand({
@@ -42,11 +42,11 @@ function ToDoListZustand() {
       title: task,
       isCompleted: false,
     });
-  };
+  }, [task]);
 
-  const formatData = (data: ITask[]): ITask[] => {
-    const newList = data.concat();
-    let numberOfElementsLastRow = data.length % 2;
+  const formatData = useMemo(() => {
+    const newList = taskList.concat();
+    let numberOfElementsLastRow = taskList.length % 2;
     while (numberOfElementsLastRow !== 2 && numberOfElementsLastRow !== 0) {
       newList.push({
         id: `empty ${numberOfElementsLastRow}`,
@@ -57,7 +57,7 @@ function ToDoListZustand() {
     }
 
     return newList;
-  };
+  }, [taskList]);
 
   return (
     <View
@@ -70,7 +70,7 @@ function ToDoListZustand() {
           numColumns={orientation.isPortrait ? 1 : 2}
           key={orientation.isPortrait ? 'v' : 'h'}
           contentContainerStyle={{flexGrow: 1}}
-          data={formatData(taskList)}
+          data={formatData}
           renderItem={({item}) =>
             orientation.isPortrait ? (
               <TaskTileZustand task={item} orientation={orientation} />

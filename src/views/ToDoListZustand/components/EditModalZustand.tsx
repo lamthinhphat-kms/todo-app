@@ -1,10 +1,10 @@
-import {PropsWithChildren, useEffect, useState} from 'react';
+import {PropsWithChildren, memo, useEffect, useState} from 'react';
 import {Button, Modal, StyleSheet, TextInput, View} from 'react-native';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {zustandStore} from 'zustand/store';
 
 type EditModalZustandProps = PropsWithChildren<{}>;
-export function EditModalZustand(props: EditModalZustandProps) {
+export default memo(function EditModalZustand(props: EditModalZustandProps) {
   const setShowModal = zustandStore(store => store.setShowModal);
   const taskModal = zustandStore(store => store.taskModal);
   const [title, setTitle] = useState<string>(taskModal.title);
@@ -42,7 +42,7 @@ export function EditModalZustand(props: EditModalZustandProps) {
       </View>
     </Animated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   background: {
